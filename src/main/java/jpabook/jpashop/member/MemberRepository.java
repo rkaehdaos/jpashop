@@ -15,7 +15,7 @@ public class MemberRepository {
         return member.getId(); //커맨드와 쿼리 분리
     }
 
-    public Member find(Long id) {
+    public Member findById(Long id) {
         return em.find(Member.class, id);
     }
 }
