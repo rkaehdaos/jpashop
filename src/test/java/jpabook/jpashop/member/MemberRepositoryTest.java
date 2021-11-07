@@ -63,6 +63,8 @@ class MemberRepositoryTest {
 
         //when
         Long savedId = memberRepository.save(member);
+        testEntityManager.flush();
+        testEntityManager.clear();
         Member findedMember = memberRepository.findById(savedId);
 
         //then - 검증만

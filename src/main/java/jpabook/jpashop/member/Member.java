@@ -1,5 +1,6 @@
 package jpabook.jpashop.member;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
+@EqualsAndHashCode(of = "id")
 @Getter @Setter
 public class Member {
     @Id @GeneratedValue
