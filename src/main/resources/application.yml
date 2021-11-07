@@ -17,9 +17,10 @@ spring:
     properties:
       hibernate:
 #         system out 출력
-#        show_sql: true
+        show_sql: false
         format_sql: true
 # 로거로 찍기
 logging.level:
   org.hibernate.SQL: debug
-# org.hibernate.type: trace
+# 쿼리 파라미터 찍기
+  org.hibernate.type: trace

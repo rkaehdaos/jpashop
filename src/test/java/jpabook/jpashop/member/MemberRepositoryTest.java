@@ -68,6 +68,7 @@ class MemberRepositoryTest {
         //then - 검증만
         assertThat(findedMember.getId()).isEqualTo(member.getId());
         assertThat(findedMember.getUsername()).isEqualTo(member.getUsername());
+        assertThat(member).isEqualTo(findedMember);
     }
 
     @Test
