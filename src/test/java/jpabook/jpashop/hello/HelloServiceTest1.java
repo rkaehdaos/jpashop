@@ -33,9 +33,9 @@ class HelloServiceTest1 {
         lenient().when(helloRepository.findById(1L)).thenReturn(hello);
 
         //when
-        Long savedId = helloService.setHelloMsg(hello);
+        Long savedId = helloService.setHelloMsg("hello");
         String helloMsg = helloService.getHelloMsg(savedId);
-        
+
         //then
         assertEquals(helloMsg, "hello");
     }
