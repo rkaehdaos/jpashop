@@ -15,4 +15,7 @@ public class HelloService {
         return helloRepository.findById(id).getHelloMsg();
     }
 
+    public Long setHelloMsg(Hello hello) {
+        return helloRepository.save(hello);
+    }
 }
