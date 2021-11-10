@@ -33,11 +33,10 @@ class HelloServiceTest1 {
         when(helloRepository.findById(1L)).thenReturn(hello);
 
         //when
-        Long savedId = helloRepository.save(hello);
-        Hello findedHello = helloRepository.findById(savedId);
+        String helloMsg = helloService.getHelloMsg(1L);
 
         //then
-        assertEquals(hello, findedHello);
+        assertEquals(helloMsg, "hello");
     }
 
 }
