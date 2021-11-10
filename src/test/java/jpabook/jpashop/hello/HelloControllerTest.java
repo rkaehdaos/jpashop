@@ -1,4 +1,4 @@
-package jpabook.jpashop;
+package jpabook.jpashop.hello;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
