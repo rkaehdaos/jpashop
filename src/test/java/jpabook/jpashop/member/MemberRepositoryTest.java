@@ -1,5 +1,6 @@
 package jpabook.jpashop.member;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 
-
 // 테스트 db 지정
 // 프로퍼티로 설정 가능
 //  spring.test.database.connection: H2
@@ -32,7 +32,7 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 // spring.test.database.replace: NONE
 // 으로 변경가능
 @AutoConfigureTestDatabase(replace = NONE)
-
+@Slf4j
 class MemberRepositoryTest {
 
     /**
@@ -65,6 +65,8 @@ class MemberRepositoryTest {
         Long savedId = memberRepository.save(member);
         Member findedMember = memberRepository.findById(savedId);
 
+        log.info(String.valueOf(findedMember));
+
         //then - 검증만
         assertThat(findedMember.getId()).isEqualTo(member.getId());
         assertThat(findedMember.getUsername()).isEqualTo(member.getUsername());
@@ -81,15 +83,8 @@ class MemberRepositoryTest {
         Member returnedMemberA = testEntityManager.persist(memberA);
         Member findedmember = memberRepository.findById(returnedMemberA.getId());
 
+        //then
         assertThat(memberA).isEqualTo(returnedMemberA);
         assertThat(memberA).isEqualTo(findedmember);
-
-
-        //then
-
     }
-
-
-
-
 }
