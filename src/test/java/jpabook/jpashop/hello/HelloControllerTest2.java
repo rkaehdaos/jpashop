@@ -50,7 +50,6 @@ public class HelloControllerTest2 {
     }
 
     @Test
-    @Disabled
     void hello2_test() throws Exception {
         //given
         Hello hello = Hello.builder().helloMsg("hello").helloMsg2("dummy").build();
