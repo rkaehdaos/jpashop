@@ -13,7 +13,8 @@ public class HelloTest {
     public static final Logger log = LoggerFactory.getLogger(HelloTest.class);
 
     @Test
-    @DisplayName("기본생성 테스트 \uD83D\uDE31")
+    @DisplayName("기본생성 테스트 \uD83D\uDE31 ff \uD83D\uDC4D \u2614 \u1F90F")
+//    @DisplayName("기본생성 테스트 \uD83D\u1F605")
     void basic_constructor_test() {
         Hello hello1 = Hello.builder()
                 .helloMsg("hello1")

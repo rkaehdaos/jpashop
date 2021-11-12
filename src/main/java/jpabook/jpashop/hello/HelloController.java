@@ -34,7 +34,9 @@ public class HelloController {
         return helloService.getHelloMsg(id);
     }
 
-    @PostMapping(value = "hello", produces = MediaType.TEXT_PLAIN_VALUE)
+    @PostMapping(value = "hello",
+            consumes = MediaType.TEXT_PLAIN_VALUE,
+            produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseBody
     public ResponseEntity<String> helloPost(@RequestBody final String msg) {
         Long returnedId = helloService.setHelloMsg(msg);

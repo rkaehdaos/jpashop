@@ -1,9 +1,7 @@
 package jpabook.jpashop.hello;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.containsString;
@@ -25,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 // 서블릿 컨테이너를 실제로 띄우지 않고 모킹함
 // 모킹한 서블릿 컨테이너와 인터렉셔하려면 mockmvc 필요
-@DisplayName("WebEnvironment.MOCK + Mockmvc")
+@DisplayName("WebEnvironment.MOCK + Mockmvc : 서블릿 컨테이너 모킹")
 @AutoConfigureMockMvc
 @Transactional
 @Slf4j
