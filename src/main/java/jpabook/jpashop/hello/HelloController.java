@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
@@ -33,7 +34,7 @@ public class HelloController {
         return helloService.getHelloMsg(id);
     }
 
-    @PostMapping(value = "hello/{msg}")
+    @PostMapping(value = "hello/{msg}", produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseBody
 
     public ResponseEntity<String> helloPost(@PathVariable @Validated String msg) {
@@ -43,7 +44,15 @@ public class HelloController {
 //        headers.setContentType(new MediaType(MediaType.TEXT_PLAIN, Charset.forName("UTF-8")));
         headers.setContentType(new MediaType(MediaType.TEXT_PLAIN, StandardCharsets.UTF_8));
 
-        return new ResponseEntity<>(String.valueOf(returnedId), headers, HttpStatus.OK);
+//        return new ResponseEntity<>(String.valueOf(returnedId), headers, HttpStatus.OK);
+
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(String.valueOf(returnedId))
+                ;
+
+
 
     }
 }
