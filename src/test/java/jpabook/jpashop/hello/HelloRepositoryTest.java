@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -37,6 +38,18 @@ class HelloRepositoryTest {
     TestEntityManager testEntityManager;
     @Autowired
     private HelloRepository helloRepository;
+
+    @Autowired
+    ModelMapper modelMapper;
+
+    @Test
+    void isModelMapper() {
+        //given
+        assertNotNull(modelMapper);
+        //when
+
+        //then
+    }
 
     @Test
     void basic_test() {

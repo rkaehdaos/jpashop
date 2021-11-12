@@ -3,6 +3,7 @@ package jpabook.jpashop.hello;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -11,6 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.lenient;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -26,6 +28,18 @@ class HelloControllerTest1 {
 
     @MockBean
     HelloService helloService;
+
+    @Autowired
+    ModelMapper modelMapper;
+
+    @Test
+    void isModelMapper() {
+        //given
+        assertNotNull(modelMapper);
+        //when
+
+        //then
+    }
 
     @Test
     void hello_get_test() throws Exception {
@@ -53,6 +67,7 @@ class HelloControllerTest1 {
                 .andExpect(content().string("hello"))
         ;
     }
+
     @Test
     void hello_post_test() throws Exception {
         //given

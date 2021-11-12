@@ -4,6 +4,7 @@ package jpabook.jpashop.hello;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -33,8 +35,17 @@ public class HelloControllerTest2 {
     @Autowired
     private HelloService helloService;
 
-//    @Autowired
-//    private ObjectMapper objectMapper;
+    @Autowired
+    ModelMapper modelMapper;
+
+    @Test
+    void isModelMapper() {
+        //given
+        assertNotNull(modelMapper);
+        //when
+
+        //then
+    }
 
     @Test
     void hello_test() throws Exception {
