@@ -62,10 +62,14 @@ class HelloControllerTest1 {
         lenient().when(helloService.setHelloMsg(msg)).thenReturn(1L);
 
         //then
-        mockMvc.perform(post("/hello/"+msg))
+        mockMvc.perform(post("/hello/")
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .content(msg))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
     }
 }
+
+

@@ -93,14 +93,16 @@ public class HelloControllerTest2 {
 */
 
 
-        final String StringedId = mockMvc.perform(post("/hello/" + msg))
+        final String StringedId = mockMvc.perform(post("/hello/")
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .content(msg))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
 
 
-        log.info(StringedId);
+        log.debug("*****StringedId: "+StringedId);
 
         //then2
         mockMvc.perform(get("/hello/" + StringedId))
