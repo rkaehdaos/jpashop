@@ -14,6 +14,7 @@ import java.util.UUID;
 public class Hello {
     @Id @GeneratedValue
     private Long id;
+    @NonNull
     private String helloMsg;
     private String helloMsg2 = UUID.randomUUID().toString();
 

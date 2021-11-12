@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = HelloController.class)
-@DisplayName("MockMvc+MockBean 모킹")
+@DisplayName("WebMvcTest 모킹")
 class HelloControllerTest1 {
     @Autowired
     protected MockMvc mockMvc;
@@ -64,6 +64,7 @@ class HelloControllerTest1 {
         //then
         mockMvc.perform(post("/hello/"+msg))
                 .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
                 .andExpect(status().isOk());
 
     }
