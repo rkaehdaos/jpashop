@@ -17,7 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 @ExtendWith(SpringExtension.class)
@@ -77,9 +78,9 @@ class MemberRepositoryTest {
         log.info(String.valueOf(findedMember));
 
         //then - 검증만
-        assertThat(findedMember.getId()).isEqualTo(member.getId());
-        assertThat(findedMember.getUsername()).isEqualTo(member.getUsername());
-        assertThat(member).isEqualTo(findedMember);
+        assertEquals(findedMember.getId(), member.getId());
+        assertEquals(findedMember.getUsername(), member.getUsername());
+        assertEquals(member, findedMember);
     }
 
     @Test
@@ -94,35 +95,31 @@ class MemberRepositoryTest {
         Member findedmember = memberRepository.findById(returnedMemberA.getId());
 
         //then
-        assertThat(memberA).isEqualTo(returnedMemberA);
-        assertThat(memberA).isEqualTo(findedmember);
+        assertEquals(memberA, returnedMemberA);
+        assertEquals(memberA, findedmember);
     }
 
     @Test
     void findByName_test() {
         //given
-        String username = "username";
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             Member member = new Member();
-            member.setUsername(username);
+            member.setUsername("member_"+i);
             memberRepository.save(member);
         }
 
         //when
         testEntityManager.flush();
         testEntityManager.clear();
-        List<Member> memberList = memberRepository.findByName(username);
-
-
+        List<Member> member_50 = memberRepository.findByName("member_50");
 
         //then - 검증만
-        assertThat(memberList.size()).isEqualTo(10);
-
+        assertNotNull(member_50);
+        assertEquals(member_50.size(), 1);
     }
 
     @Test
     void findAll_test()  {
-        List<Member> memberList = new ArrayList<>();
         //given
         for (int i = 0; i < 100; i++) {
             Member member = new Member();
@@ -139,6 +136,7 @@ class MemberRepositoryTest {
         log.debug(findMembers.stream()
                 .map(Member::getUsername)
                 .collect(Collectors.joining("\n")));
-        assertThat(findMembers.size()).isEqualTo(100);
+
+        assertEquals(findMembers.size(), 100);
     }
 }
