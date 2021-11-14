@@ -1,7 +1,6 @@
 package jpabook.jpashop.repository;
 
 import jpabook.jpashop.domain.Member;
-import jpabook.jpashop.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -100,6 +99,28 @@ class MemberRepositoryTest {
     }
 
     @Test
+    void findByName_test() {
+        //given
+        String username = "username";
+        for (int i = 0; i < 10; i++) {
+            Member member = new Member();
+            member.setUsername(username);
+            memberRepository.save(member);
+        }
+
+        //when
+        testEntityManager.flush();
+        testEntityManager.clear();
+        List<Member> memberList = memberRepository.findByName(username);
+
+
+
+        //then - 검증만
+        assertThat(memberList.size()).isEqualTo(10);
+
+    }
+
+    @Test
     void findAll_test()  {
         List<Member> memberList = new ArrayList<>();
         //given
@@ -109,21 +130,15 @@ class MemberRepositoryTest {
             memberRepository.save(member);
         }
 
+        //when
         testEntityManager.flush();
         testEntityManager.clear();
-
         List<Member> findMembers = memberRepository.findAll();
 
-
-        //when
-
         //then
-/*
-
-        log.info(findMembers.stream()
+        log.debug(findMembers.stream()
                 .map(Member::getUsername)
                 .collect(Collectors.joining("\n")));
-*/
         assertThat(findMembers.size()).isEqualTo(100);
     }
 }
