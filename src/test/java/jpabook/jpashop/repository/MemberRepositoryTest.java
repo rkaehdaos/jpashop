@@ -3,6 +3,7 @@ package jpabook.jpashop.repository;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
@@ -33,10 +39,11 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 // 으로 변경가능
 @AutoConfigureTestDatabase(replace = NONE)
 @Slf4j
+@DisplayName("회원 리포지토리 테스트")
 class MemberRepositoryTest {
 
     /**
-     * @DataJpaTest시 스프링 데이터 JPA아닌 부분은 빈등록 안됨
+     * "DataJpaTest"시 스프링 데이터 JPA아닌 부분은 빈등록 안됨
      * 따라서 테스트 컨피규로 필요한 빈등록
      */
     @TestConfiguration
@@ -56,7 +63,8 @@ class MemberRepositoryTest {
     MemberRepository memberRepository;
 
     @Test
-    void 기본테스트() throws Exception {
+    @DisplayName("기본 저장후 찾기")
+    void basic_test() {
         //given
         Member member = new Member();
         member.setUsername("memberA");
@@ -76,7 +84,8 @@ class MemberRepositoryTest {
     }
 
     @Test
-    void 테스트엔티티테스트() throws Exception {
+    @DisplayName("테스트 엔티티 사용 테스트")
+    void entity_test()  {
         //given
         Member memberA = new Member();
         memberA.setUsername("memberA");
@@ -88,5 +97,33 @@ class MemberRepositoryTest {
         //then
         assertThat(memberA).isEqualTo(returnedMemberA);
         assertThat(memberA).isEqualTo(findedmember);
+    }
+
+    @Test
+    void findAll_test()  {
+        List<Member> memberList = new ArrayList<>();
+        //given
+        for (int i = 0; i < 100; i++) {
+            Member member = new Member();
+            member.setUsername("member_"+i);
+            memberRepository.save(member);
+        }
+
+        testEntityManager.flush();
+        testEntityManager.clear();
+
+        List<Member> findMembers = memberRepository.findAll();
+
+
+        //when
+
+        //then
+/*
+
+        log.info(findMembers.stream()
+                .map(Member::getUsername)
+                .collect(Collectors.joining("\n")));
+*/
+        assertThat(findMembers.size()).isEqualTo(100);
     }
 }
