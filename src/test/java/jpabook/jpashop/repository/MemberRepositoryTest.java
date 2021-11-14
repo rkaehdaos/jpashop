@@ -1,7 +1,8 @@
-package jpabook.jpashop.member;
+package jpabook.jpashop.repository;
 
 import jpabook.jpashop.domain.Member;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 @ExtendWith(SpringExtension.class)
@@ -32,10 +39,11 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 // 으로 변경가능
 @AutoConfigureTestDatabase(replace = NONE)
 @Slf4j
+@DisplayName("회원 리포지토리 테스트")
 class MemberRepositoryTest {
 
     /**
-     * @DataJpaTest시 스프링 데이터 JPA아닌 부분은 빈등록 안됨
+     * "DataJpaTest"시 스프링 데이터 JPA아닌 부분은 빈등록 안됨
      * 따라서 테스트 컨피규로 필요한 빈등록
      */
     @TestConfiguration
@@ -55,7 +63,8 @@ class MemberRepositoryTest {
     MemberRepository memberRepository;
 
     @Test
-    void 기본테스트() throws Exception {
+    @DisplayName("기본 저장후 찾기")
+    void basic_test() {
         //given
         Member member = new Member();
         member.setUsername("memberA");
@@ -69,13 +78,14 @@ class MemberRepositoryTest {
         log.info(String.valueOf(findedMember));
 
         //then - 검증만
-        assertThat(findedMember.getId()).isEqualTo(member.getId());
-        assertThat(findedMember.getUsername()).isEqualTo(member.getUsername());
-        assertThat(member).isEqualTo(findedMember);
+        assertEquals(findedMember.getId(), member.getId());
+        assertEquals(findedMember.getUsername(), member.getUsername());
+        assertEquals(member, findedMember);
     }
 
     @Test
-    void 테스트엔티티테스트() throws Exception {
+    @DisplayName("테스트 엔티티 사용 테스트")
+    void entity_test()  {
         //given
         Member memberA = new Member();
         memberA.setUsername("memberA");
@@ -85,7 +95,48 @@ class MemberRepositoryTest {
         Member findedmember = memberRepository.findById(returnedMemberA.getId());
 
         //then
-        assertThat(memberA).isEqualTo(returnedMemberA);
-        assertThat(memberA).isEqualTo(findedmember);
+        assertEquals(memberA, returnedMemberA);
+        assertEquals(memberA, findedmember);
+    }
+
+    @Test
+    void findByName_test() {
+        //given
+        for (int i = 0; i < 100; i++) {
+            Member member = new Member();
+            member.setUsername("member_"+i);
+            memberRepository.save(member);
+        }
+
+        //when
+        testEntityManager.flush();
+        testEntityManager.clear();
+        List<Member> member_50 = memberRepository.findByName("member_50");
+
+        //then - 검증만
+        assertNotNull(member_50);
+        assertEquals(member_50.size(), 1);
+    }
+
+    @Test
+    void findAll_test()  {
+        //given
+        for (int i = 0; i < 100; i++) {
+            Member member = new Member();
+            member.setUsername("member_"+i);
+            memberRepository.save(member);
+        }
+
+        //when
+        testEntityManager.flush();
+        testEntityManager.clear();
+        List<Member> findMembers = memberRepository.findAll();
+
+        //then
+        log.debug(findMembers.stream()
+                .map(Member::getUsername)
+                .collect(Collectors.joining("\n")));
+
+        assertEquals(findMembers.size(), 100);
     }
 }
