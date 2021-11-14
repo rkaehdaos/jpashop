@@ -7,7 +7,7 @@ import lombok.ToString;
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter @ToString
+@Getter @Setter
 public class Delivery {
     @Id @GeneratedValue
     @JoinColumn(name = "delivery_id")

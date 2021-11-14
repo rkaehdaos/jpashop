@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter @ToString
+@Getter @Setter
 @EqualsAndHashCode(of = "id")
 public class Member {
     @Id @GeneratedValue
@@ -21,8 +21,6 @@ public class Member {
     private Address address;
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
-
-
 
 }
 
