@@ -2,9 +2,7 @@ package jpabook.jpashop.service;
 
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.repository.MemberRepository;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,12 +12,12 @@ import java.util.List;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
-    @NonNull
-    private MemberRepository memberRepository;
+
+    private final MemberRepository memberRepository;
 
     //가입
     @Transactional
-    public Long Join(Member member) {
+    public Long join(Member member) {
         validateDuplicateMember(member);
         return memberRepository.save(member);
     }
@@ -34,12 +32,10 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-
-
     // 중복 회원 검증
     private void validateDuplicateMember(Member member) {
         List<Member> findMemberList = memberRepository.findByName(member.getUsername());
-        if(!findMemberList.isEmpty()){
+        if (!findMemberList.isEmpty()) {
             throw new IllegalStateException("이미 존재하는 회원입니다");
         }
     }

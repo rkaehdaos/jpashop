@@ -12,10 +12,10 @@ import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.lenient;
-
+//순수단위 테스트 지향
 @ExtendWith(MockitoExtension.class)
-class MemberServiceTest {
-    public static final Logger log =  LoggerFactory.getLogger(MemberServiceTest.class);
+class MemberServiceTest1 {
+    public static final Logger log =  LoggerFactory.getLogger(MemberServiceTest1.class);
     @InjectMocks
     MemberService memberService;
     @Mock
@@ -33,7 +33,7 @@ class MemberServiceTest {
         lenient().when(memberRepository.save(member)).thenReturn(1L);
         lenient().when(memberRepository.findById(1L)).thenReturn(member);
 
-        Long savedId = memberService.Join(member);
+        Long savedId = memberService.join(member);
         String returnedName = memberService.FindById(savedId).getUsername();
         //then
         assertEquals(returnedName, username);
