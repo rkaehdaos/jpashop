@@ -80,5 +80,22 @@ public class Order {
 
     }
 
+    // 비지니스가 아님
+    // 조회 로직
+
+    /**
+     * 주문 상품 전체 가격 조회
+     * @return 전체 주문 가격
+     */
+    public int getTotalPrice() {
+        int totalPrice = 0;
+
+        for (OrderItem orderItem : orderItems) {
+            totalPrice+=orderItem.getTotalPrice();
+        }
+
+        return  totalPrice;
+    }
+
 
 }
