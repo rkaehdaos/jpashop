@@ -66,7 +66,7 @@ public class Order {
         Arrays.stream(orderItems).forEach(order::addOrderItem);
         order.setOrderStatus(OrderStatus.ORDER);
         order.setLocalDateTime(LocalDateTime.now());
-        return null;
+        return order;
     }
 
     // 취소 메서드
