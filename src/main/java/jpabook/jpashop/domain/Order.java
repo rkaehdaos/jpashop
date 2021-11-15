@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.security.PublicKey;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static javax.persistence.FetchType.*;
@@ -59,9 +60,7 @@ public class Order {
         Order order = new Order();
         order.setMember(member);
         order.setDelivery(delivery);
-        for (OrderItem orderItem : orderItems) {
-            order.addOrderItem(orderItem);
-        }
+        Arrays.stream(orderItems).forEach(order::addOrderItem);
         order.setOrderStatus(OrderStatus.ORDER);
         order.setLocalDateTime(LocalDateTime.now());
         return null;
@@ -74,9 +73,7 @@ public class Order {
             throw new IllegalStateException("이미 완료된 주문은 취소가 불가");
         }
         setOrderStatus(OrderStatus.CANCEL);
-        for (OrderItem orderItem : orderItems) {
-            orderItem.cancel();
-        }
+        orderItems.forEach(OrderItem::cancel);
 
     }
 
@@ -88,13 +85,7 @@ public class Order {
      * @return 전체 주문 가격
      */
     public int getTotalPrice() {
-        int totalPrice = 0;
-
-        for (OrderItem orderItem : orderItems) {
-            totalPrice+=orderItem.getTotalPrice();
-        }
-
-        return  totalPrice;
+        return orderItems.stream().mapToInt(OrderItem::getTotalPrice).sum();
     }
 
 
