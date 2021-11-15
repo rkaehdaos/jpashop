@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.security.PublicKey;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +67,18 @@ public class Order {
         return null;
     }
 
+
+    // 취소 메서드
+    public void cancel() {
+        if(delivery.getStatus()==DeliveryStatus.COMPLETE){
+            throw new IllegalStateException("이미 완료된 주문은 취소가 불가");
+        }
+        setOrderStatus(OrderStatus.CANCEL);
+        for (OrderItem orderItem : orderItems) {
+            orderItem.cancel();
+        }
+
+    }
 
 
 }
