@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @Transactional
@@ -30,7 +32,7 @@ class OrderServiceTest {
 
     @Test
     @DisplayName("상품주문")
-    void item_order() throws Exception {
+    void item_order() {
 
         //given
         Member member = createMember();
@@ -54,17 +56,27 @@ class OrderServiceTest {
 
     @Test
     @DisplayName("주문 취소")
-    void order_cancel() throws Exception {
+    void order_cancel() {
         //given
+        Member member = createMember();
+        Book book = createBook("jpa", 10000, 10);
+        int orderCount = 2;
+        Long orderId = orderService.order(member.getId(), book.getId(), orderCount);
+        assertEquals(8, book.getStockQuantity(), "주문 수량만큼 재고 수가 줄어야 함");
 
         //when
+        orderService.cancelOrder(orderId);
 
         //then
+        assertEquals(10, book.getStockQuantity(), "취소량만큼 재고 수가 복구가 되어야 함");
+        Order findOrder = orderRepository.findOne(orderId);
+        assertEquals(OrderStatus.CANCEL, findOrder.getOrderStatus(), "오더 상태가 CANCEL이어야 함");
+
     }
 
     @Test
     @DisplayName("상품주문 재고수량 초과")
-    void order_ordercount_over_stockQuantity() throws Exception {
+    void order_ordercount_over_stockQuantity() {
         //given
         Member member = createMember();
         Item item = createBook("jpa", 10000, 10);
@@ -76,9 +88,6 @@ class OrderServiceTest {
         assertThrows(NotEnoughStockException.class, () -> {
             Long orderId = orderService.order(member.getId(), item.getId(), orderCount);
         });
-
-
-
 
     }
 
