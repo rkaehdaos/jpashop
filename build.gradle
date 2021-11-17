@@ -4,6 +4,11 @@ plugins {
 }
 apply plugin: 'io.spring.dependency-management'
 
+//빌드시 plain jar 생성 방지
+jar {
+    enabled = false
+}
+
 group = 'jpabook'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
