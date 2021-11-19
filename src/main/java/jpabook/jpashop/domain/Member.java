@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter @Setter @ToString
 @EqualsAndHashCode(of = "id")
 public class Member {
     @Id @GeneratedValue
