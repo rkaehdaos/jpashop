@@ -13,7 +13,6 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,7 +66,7 @@ class MemberRepositoryTest {
     void basic_test() {
         //given
         Member member = new Member();
-        member.setUsername("memberA");
+        member.setName("memberA");
 
         //when
         Long savedId = memberRepository.save(member);
@@ -79,7 +78,7 @@ class MemberRepositoryTest {
 
         //then - 검증만
         assertEquals(findedMember.getId(), member.getId());
-        assertEquals(findedMember.getUsername(), member.getUsername());
+        assertEquals(findedMember.getName(), member.getName());
         assertEquals(member, findedMember);
     }
 
@@ -88,7 +87,7 @@ class MemberRepositoryTest {
     void entity_test()  {
         //given
         Member memberA = new Member();
-        memberA.setUsername("memberA");
+        memberA.setName("memberA");
 
         //when
         Member returnedMemberA = testEntityManager.persist(memberA);
@@ -104,7 +103,7 @@ class MemberRepositoryTest {
         //given
         for (int i = 0; i < 100; i++) {
             Member member = new Member();
-            member.setUsername("member_"+i);
+            member.setName("member_"+i);
             memberRepository.save(member);
         }
 
@@ -123,7 +122,7 @@ class MemberRepositoryTest {
         //given
         for (int i = 0; i < 100; i++) {
             Member member = new Member();
-            member.setUsername("member_"+i);
+            member.setName("member_"+i);
             memberRepository.save(member);
         }
 
@@ -134,7 +133,7 @@ class MemberRepositoryTest {
 
         //then
         log.debug(findMembers.stream()
-                .map(Member::getUsername)
+                .map(Member::getName)
                 .collect(Collectors.joining("\n")));
 
         assertEquals(findMembers.size(), 100);

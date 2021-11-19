@@ -28,7 +28,7 @@ public class MemberServiceTest2 {
     void member_join_test() {
         //given
         Member member = new Member();
-        member.setUsername("kim");
+        member.setName("kim");
 
         //when
         Long joinedId = memberService.join(member);
@@ -44,8 +44,8 @@ public class MemberServiceTest2 {
         //given
         Member member1 = new Member();
         Member member2 = new Member();
-        member1.setUsername("kim");
-        member2.setUsername("kim");
+        member1.setName("kim");
+        member2.setName("kim");
 
         //then
         assertThrows(IllegalStateException.class, () -> {
