@@ -1,6 +1,5 @@
 package jpabook.jpashop.controller;
 
-import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +26,12 @@ public class MemberController {
 
     @GetMapping("/members/new")
     public String createForm(Model model) {
-        model.addAttribute("memberForm", new memberForm());
+        model.addAttribute("memberForm", new MemberForm());
         return "members/createMemberForm";
     }
 
     @PostMapping("/members/new")
-    public String create(@Valid memberForm form, BindingResult result) {
+    public String create(@Valid MemberForm form, BindingResult result) {
         if (result.hasErrors())
             return "members/createMemberForm";
         Member member = modelMapper.map(form, Member.class);

@@ -7,7 +7,7 @@ import lombok.ToString;
 import javax.validation.constraints.NotEmpty;
 
 @Getter @Setter @ToString
-public class memberForm {
+public class MemberForm {
     @NotEmpty(message = "회원 이름은 필수")
     private String name;
     private String city;

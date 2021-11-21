@@ -1,10 +1,9 @@
 package jpabook.jpashop;
 
-import jpabook.jpashop.controller.memberForm;
+import jpabook.jpashop.controller.MemberForm;
 import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.Member;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.Provider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -23,9 +22,9 @@ public class JpashopAdvanceApplication {
 
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(STRICT);
-        modelMapper.createTypeMap(memberForm.class, Member.class).setProvider(
+        modelMapper.createTypeMap(MemberForm.class, Member.class).setProvider(
                 request -> {
-                    memberForm form = memberForm.class.cast(request.getSource());
+                    MemberForm form = MemberForm.class.cast(request.getSource());
                     Address address =
                             new Address(form.getCity(),
                                     form.getStreet(),
@@ -37,10 +36,10 @@ public class JpashopAdvanceApplication {
                 }
         );
 
-        modelMapper.createTypeMap(Member.class, memberForm.class).setProvider(
+        modelMapper.createTypeMap(Member.class, MemberForm.class).setProvider(
                 request -> {
                     Member member = Member.class.cast(request.getSource());
-                    memberForm memberForm = new memberForm();
+                    MemberForm memberForm = new MemberForm();
                     memberForm.setName(member.getName());
                     memberForm.setCity(member.getAddress().getCity());
                     memberForm.setStreet(member.getAddress().getStreet());
