@@ -20,9 +20,7 @@ import java.util.List;
 @Slf4j
 public class MemberController {
     private final MemberService memberService;
-
-    @Autowired
-    ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     @GetMapping("/members/new")
     public String createForm(Model model) {
