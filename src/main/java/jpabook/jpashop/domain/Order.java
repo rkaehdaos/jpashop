@@ -1,9 +1,6 @@
 package jpabook.jpashop.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.security.PublicKey;
@@ -53,6 +50,15 @@ public class Order {
     public void setDelivery(Delivery delivery) {
         this.delivery = delivery;
         delivery.setOrder(this);
+    }
+
+    @Builder(builderClassName = "of")
+    private Order(Member member, List<OrderItem> orderItems, Delivery delivery, LocalDateTime localDateTime, OrderStatus orderStatus) {
+        this.member = member;
+        this.orderItems = orderItems;
+        this.delivery = delivery;
+        this.localDateTime = localDateTime;
+        this.orderStatus = orderStatus;
     }
 
     //비지니스 로직
