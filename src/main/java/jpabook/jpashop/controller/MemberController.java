@@ -32,11 +32,14 @@ public class MemberController {
     }
 
     @PostMapping("/members/new")
-    public String create(@Valid MemberForm form, BindingResult result) {
+    public String create(@Valid MemberForm form,
+                         RedirectAttributes redirectAttributes,
+                         BindingResult result) {
         if (result.hasErrors())
             return "members/createMemberForm";
         Member member = modelMapper.map(form, Member.class);
-        memberService.join(member);
+        Long savedMemberId = memberService.join(member);
+        redirectAttributes.addFlashAttribute("savedMemberId",savedMemberId);
         return "redirect:/";
     }
 
