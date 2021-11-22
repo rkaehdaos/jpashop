@@ -63,10 +63,10 @@ public class HelloControllerTest2 {
         Hello hello = Hello.builder().helloMsg("hello").helloMsg2("dummy").build();
 
         //when
-        helloService.setHelloMsg("hello"); //미리 저장
+        Long returnID = helloService.setHelloMsg("hello");//미리 저장
 
         //then
-        mockMvc.perform(get("/hello/1"))
+        mockMvc.perform(get("/hello/"+returnID))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
@@ -82,23 +82,7 @@ public class HelloControllerTest2 {
         //when
 
         //then
-/*
 
-        mockMvc.perform(post("/hello/"+msg))
-                .andDo(print())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
-                .andExpect(status().isOk());
-*/
-
-/*
-
-        MvcResult mvcResult = mockMvc.perform(post("/hello/" + msg))
-                .andDo(print())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
-                .andExpect(status().isOk())
-                .andReturn();
-        final String StringedId = mvcResult.getResponse().getContentAsString();
-*/
 
 
         final String StringedId = mockMvc.perform(post("/hello/")
