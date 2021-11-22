@@ -34,5 +34,7 @@ public class MemberRepository {
                 .getResultList();
     }
 
-
+    public void deleteAll() {
+        em.createQuery("delete from Member m");
+    }
 }
