@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -106,6 +108,7 @@ class OrderServiceTest {
                 .city("Seoul")
                 .street("테헤란로")
                 .zipcode("12345")
+                .orders(new ArrayList<>())
                 .build();
         em.persist(member);
         return member;

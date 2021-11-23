@@ -41,11 +41,8 @@ public class MemberServiceTest2 {
     @Test
     void duplicated_exception() {
         //given
-
         Member member1 = Member.builder().name("kim").build();
         Member member2 = Member.builder().name("kim").build();
-        member1.setName("kim");
-        member2.setName("kim");
 
         //then
         assertThrows(IllegalStateException.class, () -> {
