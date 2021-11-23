@@ -5,9 +5,10 @@ import lombok.*;
 import javax.persistence.Embeddable;
 
 @Embeddable
-@Getter
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder @Getter @ToString
 public class Address {
     private String city;
     String street;

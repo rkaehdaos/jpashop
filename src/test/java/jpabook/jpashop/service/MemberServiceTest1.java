@@ -26,8 +26,7 @@ class MemberServiceTest1 {
     void join_and_find() {
         //given
         String username = "testusername";
-        Member member = new Member();
-        member.setName(username);
+        Member member = Member.builder().name(username).build();
 
         //when
         lenient().when(memberRepository.save(member)).thenReturn(1L);

@@ -84,9 +84,12 @@ class MemberControllerTest {
     void listMembers_Test() throws Exception {
         //given
         for (int i = 0; i < 10; i++) {
-            Member member = new Member();
-            member.setName("member_"+i);
-            member.setAddress(new Address("city" + i, "street_" + i, "zip" + i));
+            Member member = Member.builder()
+                    .name("member_" + i)
+                    .city("city_" + i)
+                    .street("street_" + i)
+                    .zipcode("zip_i")
+                    .build();
             memberService.join(member);
         }
         mockMvc.perform(get("/members"))

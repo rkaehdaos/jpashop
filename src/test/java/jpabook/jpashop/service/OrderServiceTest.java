@@ -101,9 +101,12 @@ class OrderServiceTest {
     }
 
     private Member createMember() {
-        Member member = new Member();
-        member.setName("memberA");
-        member.setAddress(new Address("seoul", "테헤란로", "123-123"));
+        Member member = Member.builder()
+                .name("memberA")
+                .city("Seoul")
+                .street("테헤란로")
+                .zipcode("12345")
+                .build();
         em.persist(member);
         return member;
     }

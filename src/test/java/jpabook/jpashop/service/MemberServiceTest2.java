@@ -27,8 +27,7 @@ public class MemberServiceTest2 {
     @Test
     void member_join_test() {
         //given
-        Member member = new Member();
-        member.setName("kim");
+        Member member = Member.builder().name("kim").build();
 
         //when
         Long joinedId = memberService.join(member);
@@ -42,8 +41,9 @@ public class MemberServiceTest2 {
     @Test
     void duplicated_exception() {
         //given
-        Member member1 = new Member();
-        Member member2 = new Member();
+
+        Member member1 = Member.builder().name("kim").build();
+        Member member2 = Member.builder().name("kim").build();
         member1.setName("kim");
         member2.setName("kim");
 

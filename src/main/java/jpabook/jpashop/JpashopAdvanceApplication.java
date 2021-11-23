@@ -25,14 +25,12 @@ public class JpashopAdvanceApplication {
         modelMapper.createTypeMap(MemberForm.class, Member.class).setProvider(
                 request -> {
                     MemberForm form = MemberForm.class.cast(request.getSource());
-                    Address address =
-                            new Address(form.getCity(),
-                                    form.getStreet(),
-                                    form.getZipcode());
-                    Member member = new Member();
-                    member.setName(form.getName());
-                    member.setAddress(address);
-                    return member;
+                    return Member.builder()
+                            .name(form.getName())
+                            .city(form.getCity())
+                            .street(form.getStreet())
+                            .zipcode(form.getZipcode())
+                            .build();
                 }
         );
 
