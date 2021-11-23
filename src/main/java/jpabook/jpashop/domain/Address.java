@@ -5,7 +5,6 @@ import lombok.*;
 import javax.persistence.Embeddable;
 
 @Embeddable
-
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder @AllArgsConstructor
 @Getter @ToString

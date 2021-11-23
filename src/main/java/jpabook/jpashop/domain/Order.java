@@ -13,10 +13,12 @@ import static javax.persistence.FetchType.*;
 
 @Entity
 @Table(name = "orders")
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "order_id")
     private Long id;
 
@@ -65,7 +67,7 @@ public class Order {
 
     // 생성 메서드
     // 주문
-    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems){
+    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
         Order order = new Order();
         order.setMember(member);
         order.setDelivery(delivery);
@@ -77,7 +79,7 @@ public class Order {
 
     // 취소 메서드
     public void cancel() {
-        if(delivery.getStatus()==DeliveryStatus.COMPLETE){
+        if (delivery.getStatus() == DeliveryStatus.COMPLETE) {
             throw new IllegalStateException("이미 완료된 주문은 취소가 불가");
         }
         setOrderStatus(OrderStatus.CANCEL);
@@ -90,6 +92,7 @@ public class Order {
 
     /**
      * 주문 상품 전체 가격 조회
+     *
      * @return 전체 주문 가격
      */
     public int getTotalPrice() {

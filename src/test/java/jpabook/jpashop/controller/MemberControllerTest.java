@@ -59,11 +59,11 @@ class MemberControllerTest {
         testData.setZipcode("12345");
 
         mockMvc.perform(post("/members/new")
-                .contentType(MediaType.TEXT_PLAIN)
-                .param("name", testData.getName())
-                .param("city", testData.getCity() )
-                .param("street", testData.getStreet() )
-                .param("zipcode", testData.getZipcode()))
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .param("name", testData.getName())
+                        .param("city", testData.getCity())
+                        .param("street", testData.getStreet())
+                        .param("zipcode", testData.getZipcode()))
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(flash().attributeExists("savedMemberId"))
@@ -101,6 +101,4 @@ class MemberControllerTest {
     void tearDown() {
         memberRepository.deleteAll();
     }
-
-
 }
