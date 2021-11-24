@@ -79,19 +79,15 @@ public class Order {
 
     // 취소 메서드
     public void cancel() {
-        if (delivery.getStatus() == DeliveryStatus.COMPLETE) {
+        if (delivery.getStatus() == DeliveryStatus.COMPLETE)
             throw new IllegalStateException("이미 완료된 주문은 취소가 불가");
-        }
-        this.orderStatus=OrderStatus.CANCEL;
+        this.orderStatus = OrderStatus.CANCEL;
         orderItems.forEach(OrderItem::cancel);
 
     }
 
-    // 비지니스가 아님
-    // 조회 로직
-
     /**
-     * 주문 상품 전체 가격 조회
+     * 주문 상품 전체 가격 조회(비지니스 로직 아님)
      *
      * @return 전체 주문 가격
      */
