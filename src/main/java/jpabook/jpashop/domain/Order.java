@@ -13,8 +13,7 @@ import static javax.persistence.FetchType.*;
 
 @Entity
 @Table(name = "orders")
-@Getter
-@Setter
+@Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
     @Id
@@ -44,37 +43,38 @@ public class Order {
         member.getOrders().add(this);
     }
 
+    // 오더 아이템 추가
     public void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
         orderItem.setOrder(this);
     }
 
+    // 배송 추가
     public void setDelivery(Delivery delivery) {
         this.delivery = delivery;
         delivery.setOrder(this);
     }
 
-    @Builder(builderClassName = "of")
-    private Order(Member member, List<OrderItem> orderItems, Delivery delivery, LocalDateTime localDateTime, OrderStatus orderStatus) {
+    @Builder
+    public Order(Member member, Delivery delivery, LocalDateTime localDateTime, OrderStatus orderStatus, OrderItem... orderItems) {
         this.member = member;
-        this.orderItems = orderItems;
         this.delivery = delivery;
         this.localDateTime = localDateTime;
         this.orderStatus = orderStatus;
+        Arrays.stream(orderItems).forEach(this::addOrderItem);
     }
 
-    //비지니스 로직
+//비지니스 로직
 
     // 생성 메서드
     // 주문
     public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
-        Order order = new Order();
-        order.setMember(member);
-        order.setDelivery(delivery);
-        Arrays.stream(orderItems).forEach(order::addOrderItem);
-        order.setOrderStatus(OrderStatus.ORDER);
-        order.setLocalDateTime(LocalDateTime.now());
-        return order;
+        return Order.builder()
+                .member(member)
+                .delivery(delivery)
+                .orderItems(orderItems)
+                .orderStatus(OrderStatus.ORDER)
+                .localDateTime(LocalDateTime.now()).build();
     }
 
     // 취소 메서드

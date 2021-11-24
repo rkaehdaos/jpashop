@@ -38,9 +38,13 @@ public class OrderService {
         Delivery delivery = new Delivery();
         delivery.setAddress(member.getAddress());
 
-        OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), count);  //주문상품 생성
-        Order order = Order.createOrder(member, delivery, orderItem);                   //주문 생성
-        orderRepository.save(order);    //주문 저장, cacade로 delivery, orderItem 은 같이 상태 전이되서 persist된다
+        //주문상품 생성
+        OrderItem orderItems = OrderItem.createOrderItem(item, item.getPrice(), count);
+        //주문 생성
+        Order order = Order.createOrder(member, delivery, orderItems);
+
+        //주문 저장
+        orderRepository.save(order);    //cacade로 delivery, orderItems 은 같이 상태 전이되서 persist된다
         return order.getId();
     }
 
