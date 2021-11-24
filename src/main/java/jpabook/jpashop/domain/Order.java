@@ -13,7 +13,7 @@ import static javax.persistence.FetchType.*;
 
 @Entity
 @Table(name = "orders")
-@Getter @Setter
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
     @Id
@@ -82,7 +82,7 @@ public class Order {
         if (delivery.getStatus() == DeliveryStatus.COMPLETE) {
             throw new IllegalStateException("이미 완료된 주문은 취소가 불가");
         }
-        setOrderStatus(OrderStatus.CANCEL);
+        this.orderStatus=OrderStatus.CANCEL;
         orderItems.forEach(OrderItem::cancel);
 
     }
