@@ -83,7 +83,6 @@ public class Order {
             throw new IllegalStateException("이미 완료된 주문은 취소가 불가");
         this.orderStatus = OrderStatus.CANCEL;
         orderItems.forEach(OrderItem::cancel);
-
     }
 
     /**
