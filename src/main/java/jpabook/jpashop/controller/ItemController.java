@@ -59,9 +59,10 @@ public class ItemController {
 
     }
     @PostMapping("/items/{itemId}/edit")
-    public String updateItem(@ModelAttribute("form") BookForm bookForm){
+    public String updateItem(@ModelAttribute("form") BookForm bookForm, RedirectAttributes redirectAttributes){
         Book book = modelMapper.map(bookForm, Book.class);
-        itemService.save(book);
+        Long savedBookId = itemService.update(book);
+        redirectAttributes.addFlashAttribute("savedBookId", savedBookId);
         return "redirect:/items";
     }
 }
