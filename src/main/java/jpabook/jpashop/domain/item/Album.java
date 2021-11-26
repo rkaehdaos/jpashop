@@ -20,7 +20,7 @@ public class Album extends Item {
         this.etc = etc;
     }
 
-    void changeItemValue(Album album) {
+    public void changeItemValue(Album album) {
         super.changeItemValue(album);
         this.artist = album.getArtist();
         this.etc = album.getEtc();

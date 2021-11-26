@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 @Getter @ToString(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DiscriminatorValue("Movie")
-public class Movie extends Item{
+public class Movie extends Item {
     private String director;
     private String actor;
 
@@ -20,7 +20,7 @@ public class Movie extends Item{
         this.actor = actor;
     }
 
-    void changeValue(Movie movie) {
+    public void changeValue(Movie movie) {
         super.changeItemValue(movie);
         this.director = movie.getDirector();
         this.actor = movie.getActor();

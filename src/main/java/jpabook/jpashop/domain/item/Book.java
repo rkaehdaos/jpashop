@@ -20,8 +20,7 @@ public class Book extends Item {
         this.isbn = isbn;
     }
 
-
-    void changeItemValue(Book book) {
+    public void changeItemValue(Book book) {
         super.changeItemValue(book);
         this.author = book.getAuthor();
         this.isbn = book.getIsbn();
