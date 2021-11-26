@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.*;
@@ -83,18 +84,16 @@ class MemberControllerTest {
     @DisplayName("회원 목록")
     void listMembers_Test() throws Exception {
         //given
-        for (int i = 0; i < 10; i++) {
-            Member member = Member.builder()
-                    .name("member_" + i)
-                    .city("city_" + i)
-                    .street("street_" + i)
-                    .zipcode("zip_i")
-                    .build();
-            memberService.join(member);
-        }
+        IntStream.range(0, 10).mapToObj(i -> Member.builder()
+                .name("member_" + i)
+                .city("city_" + i)
+                .street("street_" + i)
+                .zipcode("zip_i")
+                .build()).forEach(member -> memberService.join(member));
+
         mockMvc.perform(get("/members"))
                 .andDo(print())
-        ;
+                .andExpect(status().isOk());
     }
 
     @AfterEach
