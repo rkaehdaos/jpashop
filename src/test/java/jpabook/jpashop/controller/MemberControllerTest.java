@@ -33,7 +33,7 @@ class MemberControllerTest {
     @Autowired private MemberService memberService;
     @Autowired private MemberRepository memberRepository;
     @Autowired private MockMvc mockMvc;
-    @Autowired ModelMapper modelMapper;
+    @Autowired private ModelMapper modelMapper;
     @Test void isModelMapper() { assertNotNull(modelMapper); }
 
     @Test
@@ -68,7 +68,7 @@ class MemberControllerTest {
                 .andExpect(status().isFound())
                 .andExpect(flash().attributeExists("savedMemberId"))
         ;
-        List<Member> members = memberService.findMembers();
+        List<Member> members = memberRepository.findAll();
         assertNotNull(members);
         assertEquals(1, members.size(), "1개만 저장 되어있어야 함");
         Member findMember = members.get(0);
