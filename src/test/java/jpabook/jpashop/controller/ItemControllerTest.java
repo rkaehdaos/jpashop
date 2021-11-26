@@ -71,17 +71,12 @@ class ItemControllerTest {
         assertEquals(bookForm.getName(), item.getName());
 
     }
+
     @Test
     @DisplayName("삼품 목록")
-    void listItems_test() throws Exception{
+    void listItems_test() throws Exception {
         for (int i = 0; i < 10; i++) {
-            Book book = new Book();
-            book.setName("book_"+i);
-            book.setPrice(1000);
-            book.setStockQuantity(10);
-            book.setAuthor("author_"+i);
-            book.setIsbn("isbn-12345-"+i);
-            itemService.save(book);
+            itemService.save(Book.builder().name("book_" + i).price(1000).stockQuantity(10).author("author_" + i).isbn("isbn-" + i).build());
         }
         mockMvc.perform(get("/items"))
                 .andDo(print())

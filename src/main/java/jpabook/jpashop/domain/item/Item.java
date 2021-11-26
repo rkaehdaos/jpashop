@@ -2,17 +2,17 @@ package jpabook.jpashop.domain.item;
 
 import jpabook.jpashop.domain.Category;
 import jpabook.jpashop.exception.NotEnoughStockException;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE )
 @DiscriminatorColumn //default name : "DTYPE"
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Item {
     @Id @GeneratedValue
     @Column(name = "item_id")
@@ -24,6 +24,14 @@ public abstract class Item {
 
     @ManyToMany(mappedBy = "items")
     private List<Category> categories = new ArrayList<>();
+
+//    @Builder
+    protected Item(String name, int price, int stockQuantity) {
+        this.name = name;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+    }
+
 
     //재고를 늘리고 줄이고 확정하는 비지니스 로직 넣기
 

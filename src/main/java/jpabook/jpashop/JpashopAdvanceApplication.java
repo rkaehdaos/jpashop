@@ -1,9 +1,12 @@
 package jpabook.jpashop;
 
+import jpabook.jpashop.controller.BookForm;
 import jpabook.jpashop.controller.MemberForm;
 import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.Member;
+import jpabook.jpashop.domain.item.Book;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.config.Configuration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +24,11 @@ public class JpashopAdvanceApplication {
     public ModelMapper modelMapper() {
 
         ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration().setMatchingStrategy(STRICT);
+        modelMapper.getConfiguration()
+                .setMatchingStrategy(STRICT)
+                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE) //private인 경우 setter없이 필드면 같을때 자동 매핑한다고 함
+                .setFieldMatchingEnabled(true);
+        // MemberForm → Member
         modelMapper.createTypeMap(MemberForm.class, Member.class).setProvider(
                 request -> {
                     MemberForm form = MemberForm.class.cast(request.getSource());
@@ -33,6 +40,8 @@ public class JpashopAdvanceApplication {
                             .build();
                 }
         );
+        // Member → MemberForm
+/*
 
         modelMapper.createTypeMap(Member.class, MemberForm.class).setProvider(
                 request -> {
@@ -45,6 +54,19 @@ public class JpashopAdvanceApplication {
                     return memberForm;
                 }
         );
+*/
+
+        //북폼 →북
+        modelMapper.createTypeMap(BookForm.class, Book.class).setProvider(request -> {
+            BookForm form = BookForm.class.cast(request.getSource());
+            return Book.builder()
+                    .name(form.getName())
+                    .price(form.getPrice())
+                    .stockQuantity(form.getStockQuantity())
+                    .author(form.getAuthor())
+                    .isbn(form.getIsbn()).build();
+        });
+
 
         return modelMapper;
     }

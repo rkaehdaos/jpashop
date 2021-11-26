@@ -18,11 +18,7 @@ public class ItemService {
     @Transactional
     public Long save(Item item){ return itemRepository.save(item); }
 
-    public List<Item> findItems(){
-        return itemRepository.findAll();
-    }
+    public List<Item> findItems(){ return itemRepository.findAll(); }
 
-    public Item findOne(Long id){
-        return itemRepository.findById(id);
-    }
+    public Item findOne(Long id){ return itemRepository.findById(id); }
 }
