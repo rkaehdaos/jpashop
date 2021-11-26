@@ -62,7 +62,7 @@ class ItemControllerTest {
 
         //when
         mockMvc.perform(post("/items/new")
-                        .contentType(MediaType.TEXT_PLAIN)
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("name", bookForm.getName())
                         .param("price", String.valueOf(bookForm.getPrice()))
                         .param("stockQuantity", String.valueOf(bookForm.getStockQuantity()))

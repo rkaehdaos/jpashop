@@ -60,7 +60,7 @@ class MemberControllerTest {
         testData.setZipcode("12345");
 
         mockMvc.perform(post("/members/new")
-                        .contentType(MediaType.TEXT_PLAIN)
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("name", testData.getName())
                         .param("city", testData.getCity())
                         .param("street", testData.getStreet())
