@@ -1,5 +1,6 @@
 package jpabook.jpashop.controller;
 
+import jpabook.jpashop.domain.item.Book;
 import jpabook.jpashop.domain.item.Item;
 import jpabook.jpashop.repository.ItemRepository;
 import jpabook.jpashop.service.ItemService;
@@ -69,6 +70,22 @@ class ItemControllerTest {
         Item item = items.get(0);
         assertEquals(bookForm.getName(), item.getName());
 
+    }
+    @Test
+    @DisplayName("삼품 목록")
+    void listItems_test() throws Exception{
+        for (int i = 0; i < 10; i++) {
+            Book book = new Book();
+            book.setName("book_"+i);
+            book.setPrice(1000);
+            book.setStockQuantity(10);
+            book.setAuthor("author_"+i);
+            book.setIsbn("isbn-12345-"+i);
+            itemService.save(book);
+        }
+        mockMvc.perform(get("/items"))
+                .andDo(print())
+                .andExpect(status().isOk());
 
     }
 
