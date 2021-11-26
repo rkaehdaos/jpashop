@@ -32,6 +32,12 @@ public abstract class Item {
         this.stockQuantity = stockQuantity;
     }
 
+    // 업데이트용
+    protected void changeItemValue(Item item) {
+        this.name = item.getName();
+        this.price = item.getPrice();
+        this.stockQuantity = item.getStockQuantity();
+    }
 
     //재고를 늘리고 줄이고 확정하는 비지니스 로직 넣기
 
@@ -57,5 +63,6 @@ public abstract class Item {
         this.stockQuantity -= quantity;
 
     }
+
 
 }
