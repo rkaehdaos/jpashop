@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 @Slf4j
@@ -27,9 +28,11 @@ public class ItemController {
     }
 
     @PostMapping("/items/new")
-    public String create(BookForm form) {
+    public String create(BookForm form, RedirectAttributes redirectAttributes) {
         Book book = modelMapper.map(form, Book.class);
-        itemService.save(book);
+
+        Long savedBookId = itemService.save(book);
+        redirectAttributes.addFlashAttribute("savedBookId", savedBookId);
         //아직 안만든 책 화면은 주석처리
 /*
         return "redirect:/items";
