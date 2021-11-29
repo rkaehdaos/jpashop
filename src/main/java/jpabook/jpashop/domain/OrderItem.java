@@ -40,8 +40,6 @@ public class OrderItem {
         return orderPrice * count;
     }
 
-
-
     //생성 메서드
     public static OrderItem createOrderItem(Item item, int orderPrice, int count){
         OrderItem orderItem = new OrderItem();

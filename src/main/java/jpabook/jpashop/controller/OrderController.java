@@ -41,6 +41,7 @@ public class OrderController {
     @PostMapping("/order")
     public String order(@RequestParam("memberId") Long memberId, @RequestParam("itemId") Long itemId,
                         @RequestParam("count") int count) {
+        //커맨드성은 id정도만 보내고 서비스단에서 엔티티 찾는 것부터 다 하는 것
         orderService.order(memberId, itemId, count);
         return "redirect:/orders";
 
