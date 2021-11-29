@@ -1,7 +1,9 @@
 package jpabook.jpashop.controller;
 
 import jpabook.jpashop.domain.Member;
+import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.domain.item.Book;
+import jpabook.jpashop.repository.OrderRepository;
 import jpabook.jpashop.service.ItemService;
 import jpabook.jpashop.service.MemberService;
 import jpabook.jpashop.service.OrderService;
@@ -16,6 +18,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -29,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Slf4j
 class OrderControllerTest {
     @Autowired private OrderService orderService;
+    @Autowired private OrderRepository orderRepository;
     @Autowired private MemberService memberService;
     @Autowired private ItemService itemService;
     @Autowired private MockMvc mockMvc;
@@ -51,28 +56,28 @@ class OrderControllerTest {
     @Test
     @DisplayName("주문 작성 기능")
     void createOrder_Test() throws Exception {
-        memberService.join(Member.builder().name("memberA").city("Seoul").street("테헤란로").zipcode("123123").build());
-        itemService.save(Book.builder()
-                .name("bookName")
-                .price(1000)
-                .stockQuantity(100)
-                .author("authorName")
-                .isbn("12345")
-                .build());
-/*
+        Member member = Member.builder().name("memberA").city("Seoul").street("테헤란로").zipcode("123123").build();
+        Book book = Book.builder().name("book").price(1000).stockQuantity(100).author("Name").isbn("12345").build();
+        Long memberId = memberService.join(member);
+        Long bookId = itemService.save(book);
 
-        mockMvc.perform(post("/members/new")
+
+        mockMvc.perform(post("/order")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-//                        .param("name", testData.getName())
-//                        .param("city", testData.getCity())
-//                        .param("street", testData.getStreet())
-//                        .param("zipcode", testData.getZipcode())
+                        .param("memberId", String.valueOf(memberId))
+                        .param("itemId", String.valueOf(bookId))
+                        .param("count", String.valueOf(50))
                 )
                 .andDo(print())
                 .andExpect(status().isFound())
-                .andExpect(flash().attributeExists("savedMemberId"))
+                .andExpect(flash().attributeExists("orderId"))
         ;
-*/
+
+        List<Order> orderList = orderRepository.findAll();
+        assertNotNull(orderList,"비어있지 않아야 하고");
+        assertEquals(1, orderList.size(),"1개만 들어있는데");
+        Order findOrder = orderList.get(0);
+//        log.info("**findOrder: "+findOrder);
 
 
     }
