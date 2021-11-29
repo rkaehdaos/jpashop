@@ -1,6 +1,7 @@
 package jpabook.jpashop.controller;
 
 import jpabook.jpashop.domain.Member;
+import jpabook.jpashop.domain.OrderSearch;
 import jpabook.jpashop.domain.item.Item;
 import jpabook.jpashop.service.ItemService;
 import jpabook.jpashop.service.MemberService;
@@ -11,8 +12,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -40,11 +43,15 @@ public class OrderController {
 
     @PostMapping("/order")
     public String order(@RequestParam("memberId") Long memberId, @RequestParam("itemId") Long itemId,
-                        @RequestParam("count") int count) {
+                        @RequestParam("count") int count, RedirectAttributes redirectAttributes) {
         //커맨드성은 id정도만 보내고 서비스단에서 엔티티 찾는 것부터 다 하는 것
-        orderService.order(memberId, itemId, count);
+        redirectAttributes.addFlashAttribute("orderId", orderService.order(memberId, itemId, count));
         return "redirect:/orders";
+    }
 
+    @GetMapping("/orders")
+    public String orderList(@ModelAttribute("orderSearch") OrderSearch orderSearch, Model model) {
+        return "";
     }
 
 
