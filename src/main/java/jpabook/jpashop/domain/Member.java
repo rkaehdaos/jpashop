@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @ToString()
+@Getter @ToString
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
@@ -21,13 +21,17 @@ public class Member {
     private Address address;
 
     @OneToMany(mappedBy = "member")
-    private List<Order> orders = new ArrayList<>();
+    private List<Order> orders;
 
     @Builder
     public Member(String name, String city, String street, String zipcode, List<Order> orders) {
         this.name = name;
         this.orders = orders;
         this.address = Address.builder().city(city).street(street).zipcode(zipcode).build();
+        if (orders != null)
+            this.orders = orders;
+        else
+            this.orders = new ArrayList<>();
     }
 }
 

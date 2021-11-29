@@ -13,7 +13,7 @@ import static javax.persistence.FetchType.*;
 
 @Entity
 @Table(name = "orders")
-@Getter @ToString(exclude = "member")
+@Getter @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
     @Id
@@ -57,7 +57,8 @@ public class Order {
 
     @Builder
     public Order(Member member, Delivery delivery, LocalDateTime localDateTime, OrderStatus orderStatus, OrderItem... orderItems) {
-        this.member = member;
+//        this.member = member;
+        this.setMember(member);
         this.delivery = delivery;
         this.localDateTime = localDateTime;
         this.orderStatus = orderStatus;
