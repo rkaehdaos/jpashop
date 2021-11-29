@@ -85,7 +85,18 @@ public class OrderRepository {
         return query.getResultList();
     }
 
-    // 3. Query DSL
+    // 3. Query DSL - 생략
+
+
+    /**
+     * 전체 찾기
+     *
+     * @return 주문 전체 리스트
+     */
+    public List<Order> findAll() {
+        return em.createQuery("select o from Order o", Order.class).getResultList();
+    }
+
 
 
 }
