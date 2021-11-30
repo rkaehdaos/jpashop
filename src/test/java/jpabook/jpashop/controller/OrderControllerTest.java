@@ -77,7 +77,7 @@ class OrderControllerTest {
         assertNotNull(orderList,"비어있지 않아야 하고");
         assertEquals(1, orderList.size(),"1개만 들어있는데");
         Order findOrder = orderList.get(0);
-//        log.info("**findOrder: "+findOrder);
+        log.info("**findOrder: "+findOrder);
 
 
     }
