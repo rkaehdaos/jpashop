@@ -36,7 +36,15 @@ public class MemberApiController {
         return new CreateMemberResponse(memberId);
     }
 
+    @PostMapping(value = "/api/v2/members"
+            , consumes = MediaType.APPLICATION_JSON_VALUE
+            , produces = MediaType.APPLICATION_JSON_VALUE)
 
+    public CreateMemberResponse saveMemberV2(@RequestBody @Valid CreateMemberRequest request) {
+        Member member = Member.builder().name(request.getName()).build();
+        Long memberId = memberService.join(member);
+        return new CreateMemberResponse(memberId);
+    }
 
 
 
