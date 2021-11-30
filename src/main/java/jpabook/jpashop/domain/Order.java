@@ -3,7 +3,6 @@ package jpabook.jpashop.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import java.security.PublicKey;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +31,7 @@ public class Order {
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
-    private LocalDateTime localDateTime; //주문시간
+    private LocalDateTime orderDate; //주문시간
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus; //주문 상태
@@ -56,11 +55,11 @@ public class Order {
     }
 
     @Builder
-    public Order(Member member, Delivery delivery, LocalDateTime localDateTime, OrderStatus orderStatus, OrderItem... orderItems) {
+    public Order(Member member, Delivery delivery, LocalDateTime orderDate, OrderStatus orderStatus, OrderItem... orderItems) {
 //        this.member = member;
         this.setMember(member);
         this.delivery = delivery;
-        this.localDateTime = localDateTime;
+        this.orderDate = orderDate;
         this.orderStatus = orderStatus;
         Arrays.stream(orderItems).forEach(this::addOrderItem);
     }
@@ -75,7 +74,7 @@ public class Order {
                 .delivery(delivery)
                 .orderItems(orderItems)
                 .orderStatus(OrderStatus.ORDER)
-                .localDateTime(LocalDateTime.now()).build();
+                .orderDate(LocalDateTime.now()).build();
     }
 
     // 취소 메서드
