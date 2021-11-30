@@ -35,15 +35,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @Slf4j
 class OrderControllerTest {
-    @Autowired
-    EntityManager entityManager;
+    @Autowired private EntityManager em;
     @Autowired private OrderService orderService;
     @Autowired private OrderRepository orderRepository;
     @Autowired private MemberService memberService;
     @Autowired private ItemService itemService;
     @Autowired private MockMvc mockMvc;
     @Autowired private ModelMapper modelMapper;
-    @Test void isTestEntityManager() { assertNotNull(entityManager); }
+    @Test void isTestEntityManager() { assertNotNull(em); }
     @Test void isModelMapper() { assertNotNull(modelMapper); }
 
     @Test
@@ -108,6 +107,9 @@ class OrderControllerTest {
         assertEquals(STOCK-ORDER_COUNT, book.getStockQuantity(), "남은 재고 줄어듬 확인");
 
 
+        em.flush();
+        em.clear();
+
         //when
         mockMvc.perform(post("/orders/"+orderId+"/cancel")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -118,11 +120,12 @@ class OrderControllerTest {
         ;
 
         //then
-        assertEquals(STOCK, book.getStockQuantity(), "남은 재고 원복 확인");
+        assertEquals(STOCK, itemService.findOne(bookId).getStockQuantity(), "남은 재고 원복 확인");
         assertEquals(OrderStatus.CANCEL, orderRepository.findOne(orderId).getOrderStatus(), "주문상태 변경 확인");
 
     }
 
+    //주문 검색 테스트
 
 
 }
