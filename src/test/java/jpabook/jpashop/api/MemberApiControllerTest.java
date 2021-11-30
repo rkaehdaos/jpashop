@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,6 +46,10 @@ class MemberApiControllerTest {
                 .andExpect(jsonPath("id").value(1))
 //                .andExpect(status().isCreated())
                 ;
+        List<Member> members = memberService.findMembers();
+        assertNotNull(members);
+        assertEquals(1, members.size());
+        log.info("***debug member: "+members.get(0));
     }
 
 }
