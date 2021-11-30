@@ -14,7 +14,6 @@ import javax.persistence.EntityManager;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
 @SpringBootTest
 @Transactional
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -27,8 +26,7 @@ public class MemberServiceTest2 {
     @Test
     void member_join_test() {
         //given
-        Member member = new Member();
-        member.setUsername("kim");
+        Member member = Member.builder().name("kim").build();
 
         //when
         Long joinedId = memberService.join(member);
@@ -42,10 +40,8 @@ public class MemberServiceTest2 {
     @Test
     void duplicated_exception() {
         //given
-        Member member1 = new Member();
-        Member member2 = new Member();
-        member1.setUsername("kim");
-        member2.setUsername("kim");
+        Member member1 = Member.builder().name("kim").build();
+        Member member2 = Member.builder().name("kim").build();
 
         //then
         assertThrows(IllegalStateException.class, () -> {

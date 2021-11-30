@@ -1,12 +1,8 @@
 package jpabook.jpashop.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
-import java.security.PublicKey;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,10 +12,11 @@ import static javax.persistence.FetchType.*;
 
 @Entity
 @Table(name = "orders")
-@Getter @Setter
+@Getter @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "order_id")
     private Long id;
 
@@ -34,7 +31,7 @@ public class Order {
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
-    private LocalDateTime localDateTime; //주문시간
+    private LocalDateTime orderDate; //주문시간
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus; //주문 상태
@@ -45,45 +42,52 @@ public class Order {
         member.getOrders().add(this);
     }
 
+    // 오더 아이템 추가
     public void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
         orderItem.setOrder(this);
     }
 
+    // 배송 추가
     public void setDelivery(Delivery delivery) {
         this.delivery = delivery;
         delivery.setOrder(this);
     }
 
-    //비지니스 로직
+    @Builder
+    public Order(Member member, Delivery delivery, LocalDateTime orderDate, OrderStatus orderStatus, OrderItem... orderItems) {
+//        this.member = member;
+        this.setMember(member);
+        this.delivery = delivery;
+        this.orderDate = orderDate;
+        this.orderStatus = orderStatus;
+        Arrays.stream(orderItems).forEach(this::addOrderItem);
+    }
+
+//비지니스 로직
 
     // 생성 메서드
     // 주문
-    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems){
-        Order order = new Order();
-        order.setMember(member);
-        order.setDelivery(delivery);
-        Arrays.stream(orderItems).forEach(order::addOrderItem);
-        order.setOrderStatus(OrderStatus.ORDER);
-        order.setLocalDateTime(LocalDateTime.now());
-        return order;
+    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
+        return Order.builder()
+                .member(member)
+                .delivery(delivery)
+                .orderItems(orderItems)
+                .orderStatus(OrderStatus.ORDER)
+                .orderDate(LocalDateTime.now()).build();
     }
 
     // 취소 메서드
     public void cancel() {
-        if(delivery.getStatus()==DeliveryStatus.COMPLETE){
+        if (delivery.getStatus() == DeliveryStatus.COMPLETE)
             throw new IllegalStateException("이미 완료된 주문은 취소가 불가");
-        }
-        setOrderStatus(OrderStatus.CANCEL);
+        this.orderStatus = OrderStatus.CANCEL;
         orderItems.forEach(OrderItem::cancel);
-
     }
 
-    // 비지니스가 아님
-    // 조회 로직
-
     /**
-     * 주문 상품 전체 가격 조회
+     * 주문 상품 전체 가격 조회(비지니스 로직 아님)
+     *
      * @return 전체 주문 가격
      */
     public int getTotalPrice() {

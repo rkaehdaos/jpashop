@@ -26,15 +26,14 @@ class MemberServiceTest1 {
     void join_and_find() {
         //given
         String username = "testusername";
-        Member member = new Member();
-        member.setUsername(username);
+        Member member = Member.builder().name(username).build();
 
         //when
         lenient().when(memberRepository.save(member)).thenReturn(1L);
         lenient().when(memberRepository.findById(1L)).thenReturn(member);
 
         Long savedId = memberService.join(member);
-        String returnedName = memberService.FindById(savedId).getUsername();
+        String returnedName = memberService.FindById(savedId).getName();
         //then
         assertEquals(returnedName, username);
     }

@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -36,20 +38,17 @@ class OrderServiceTest {
 
         //given
         Member member = createMember();
-
         Book book = createBook("jpa", 10000, 10);
 
         //when
         int orderCount = 2;
         Long orderId = orderService.order(member.getId(), book.getId(), orderCount);
-
-
-        //then
         Order getOrder = orderRepository.findOne(orderId);
 
-        assertEquals(OrderStatus.ORDER, getOrder.getOrderStatus(),"상품 주문시 상태는 ORDER");
+        //then
+        assertEquals(OrderStatus.ORDER, getOrder.getOrderStatus(), "상품 주문시 상태는 ORDER");
         assertEquals(1, getOrder.getOrderItems().size(), "주문한 상품 카운트 수가 정확해야");
-        assertEquals(10000*orderCount, getOrder.getTotalPrice(), "주문가격은 정확히 계산이 되는가? ㅋ");
+        assertEquals(10000 * orderCount, getOrder.getTotalPrice(), "주문가격은 정확히 계산이 되는가? ㅋ");
         assertEquals(8, book.getStockQuantity(), "주문 수량만큼 재고 수가 줄어야 함");
 
     }
@@ -71,7 +70,6 @@ class OrderServiceTest {
         assertEquals(10, book.getStockQuantity(), "취소량만큼 재고 수가 복구가 되어야 함");
         Order findOrder = orderRepository.findOne(orderId);
         assertEquals(OrderStatus.CANCEL, findOrder.getOrderStatus(), "오더 상태가 CANCEL이어야 함");
-
     }
 
     @Test
@@ -92,18 +90,25 @@ class OrderServiceTest {
     }
 
     private Book createBook(String name, int price, int stockQuantity) {
-        Book book = new Book();
-        book.setName(name);
-        book.setPrice(price);
-        book.setStockQuantity(stockQuantity);
+        Book book = Book.builder()
+                .name(name)
+                .price(price)
+                .stockQuantity(stockQuantity)
+                .author("noName")
+                .isbn("00000")
+                .build();
         em.persist(book);
         return book;
     }
 
     private Member createMember() {
-        Member member = new Member();
-        member.setUsername("memberA");
-        member.setAddress(new Address("seoul", "테헤란로", "123-123"));
+        Member member = Member.builder()
+                .name("memberA")
+                .city("Seoul")
+                .street("테헤란로")
+                .zipcode("12345")
+                .orders(new ArrayList<>())
+                .build();
         em.persist(member);
         return member;
     }

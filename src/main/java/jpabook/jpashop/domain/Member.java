@@ -1,26 +1,35 @@
 package jpabook.jpashop.domain;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-@Getter @Setter
+@Getter @ToString(exclude = "orders")
 @EqualsAndHashCode(of = "id")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
     @Id @GeneratedValue
     @Column(name = "member_id")
     private Long id;
-    private String username;
+
+    private String name;
+
     @Embedded
     private Address address;
-    @OneToMany(mappedBy = "member")
-    private List<Order> orders = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member")
+    private List<Order> orders;
+
+    @Builder
+    public Member(String name, String city, String street, String zipcode, List<Order> orders) {
+        this.name = name;
+        this.orders = orders;
+        this.address = Address.builder().city(city).street(street).zipcode(zipcode).build();
+        this.orders = Objects.requireNonNullElseGet(orders, ArrayList::new);
+    }
 }
 

@@ -13,7 +13,6 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,8 +65,8 @@ class MemberRepositoryTest {
     @DisplayName("기본 저장후 찾기")
     void basic_test() {
         //given
-        Member member = new Member();
-        member.setUsername("memberA");
+        Member member = Member.builder().name("memberA").build();
+
 
         //when
         Long savedId = memberRepository.save(member);
@@ -79,7 +78,7 @@ class MemberRepositoryTest {
 
         //then - 검증만
         assertEquals(findedMember.getId(), member.getId());
-        assertEquals(findedMember.getUsername(), member.getUsername());
+        assertEquals(findedMember.getName(), member.getName());
         assertEquals(member, findedMember);
     }
 
@@ -87,8 +86,8 @@ class MemberRepositoryTest {
     @DisplayName("테스트 엔티티 사용 테스트")
     void entity_test()  {
         //given
-        Member memberA = new Member();
-        memberA.setUsername("memberA");
+        Member memberA = Member.builder().name("memberA").build();
+
 
         //when
         Member returnedMemberA = testEntityManager.persist(memberA);
@@ -102,11 +101,7 @@ class MemberRepositoryTest {
     @Test
     void findByName_test() {
         //given
-        for (int i = 0; i < 100; i++) {
-            Member member = new Member();
-            member.setUsername("member_"+i);
-            memberRepository.save(member);
-        }
+        for (int i = 0; i < 100; i++) memberRepository.save(Member.builder().name("member_" + i).build());
 
         //when
         testEntityManager.flush();
@@ -121,11 +116,7 @@ class MemberRepositoryTest {
     @Test
     void findAll_test()  {
         //given
-        for (int i = 0; i < 100; i++) {
-            Member member = new Member();
-            member.setUsername("member_"+i);
-            memberRepository.save(member);
-        }
+        for (int i = 0; i < 100; i++) memberRepository.save(Member.builder().name("member_" + i).build());
 
         //when
         testEntityManager.flush();
@@ -134,7 +125,7 @@ class MemberRepositoryTest {
 
         //then
         log.debug(findMembers.stream()
-                .map(Member::getUsername)
+                .map(Member::getName)
                 .collect(Collectors.joining("\n")));
 
         assertEquals(findMembers.size(), 100);

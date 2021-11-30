@@ -11,7 +11,8 @@ import javax.persistence.*;
 import static javax.persistence.FetchType.*;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItem {
     @Id @GeneratedValue
@@ -34,6 +35,7 @@ public class OrderItem {
         getItem().addStock(count);
     }
 
+    //젠체 비용
     public int getTotalPrice() {
         return orderPrice * count;
     }
@@ -44,9 +46,7 @@ public class OrderItem {
         orderItem.setItem(item);
         orderItem.setOrderPrice(orderPrice);
         orderItem.setCount(count);
-
         item.removeStock(count);
         return orderItem;
-
     }
 }
