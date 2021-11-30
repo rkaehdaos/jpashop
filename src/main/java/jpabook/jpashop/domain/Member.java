@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter @ToString(exclude = "orders")
@@ -28,10 +29,7 @@ public class Member {
         this.name = name;
         this.orders = orders;
         this.address = Address.builder().city(city).street(street).zipcode(zipcode).build();
-        if (orders != null)
-            this.orders = orders;
-        else
-            this.orders = new ArrayList<>();
+        this.orders = Objects.requireNonNullElseGet(orders, ArrayList::new);
     }
 }
 
