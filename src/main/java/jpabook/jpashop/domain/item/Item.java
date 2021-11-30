@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
+@Getter @ToString
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE )
 @DiscriminatorColumn //default name : "DTYPE"
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
