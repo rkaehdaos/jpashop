@@ -16,6 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static jpabook.jpashop.api.MemberApiController.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @Slf4j
 class MemberApiControllerTest {
+    @Autowired private EntityManager em;
     @Autowired private MockMvc mockMvc;
     @Autowired private MemberService memberService;
     @Autowired private MemberRepository memberRepository;
@@ -54,6 +57,8 @@ class MemberApiControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("id").exists())
                 .andReturn();
+        em.flush();
+        em.clear();
 
         //then
         Long id = JsonPath.parse(mvcResult.getResponse().getContentAsString()).read("$.id", Long.class);
@@ -79,6 +84,9 @@ class MemberApiControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("id").exists())
                 .andReturn();
+        em.flush();
+        em.clear();
+
         //then
         Long id = JsonPath.parse(mvcResult.getResponse().getContentAsString()).read("$.id", Long.class);
         Member findMember = memberRepository.findById(id);
@@ -91,13 +99,13 @@ class MemberApiControllerTest {
     void updateMemberV2Test() throws Exception {
         //given
         final String CHANGE_NAME = "memberB";
-
-        Member member = Member.builder().name("memberA").city("Seoul").street("테헤란로").zipcode("123123").build();
-        Long memberId = memberRepository.save(member);
-
         UpdateMemberRequest req = new UpdateMemberRequest();
         req.setName(CHANGE_NAME);
 
+        Member member = Member.builder().name("memberA").city("Seoul").street("테헤란로").zipcode("123123").build();
+        Long memberId = memberRepository.save(member);
+        em.flush();
+        em.clear();
         //when
         mockMvc.perform(put("/api/v2/members/" + memberId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -109,11 +117,13 @@ class MemberApiControllerTest {
                 .andExpect(jsonPath("id").exists())
                 .andExpect(jsonPath("name").exists())
                 .andExpect(jsonPath("name").value(CHANGE_NAME))
-//                .andExpect(status().isCreated())
         ;
+        em.flush();
+        em.clear();
 
         //then
         Member findMember = memberRepository.findById(memberId);
+        log.info("findMember: "+findMember);
         assertEquals(CHANGE_NAME, findMember.getName(), "같아야 함");
     }
 }
