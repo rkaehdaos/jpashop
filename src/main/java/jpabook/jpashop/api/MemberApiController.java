@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,7 +29,7 @@ public class MemberApiController {
      *  결론
      *  - API 요청 스펙에 맞추어 별도의 DTO를 파라미터로 받는다.
      *
-     * @param member
+     * @param member 엔티티 Member 타입의 member
      * @return CreateMemberResponse
      */
     @PostMapping(value = "/api/v1/members"
@@ -42,8 +43,8 @@ public class MemberApiController {
 
     /**
      * 등록 V2: 요청 값으로 별도의 DTO를 파라미터
-     * @param req
-     * @return
+     * @param req CreateMemberRequest 타입의 커맨드 객체
+     * @return CreateMemberResponse 타입의 응답 객체
      */
     @PostMapping(value = "/api/v2/members"
             , consumes = MediaType.APPLICATION_JSON_VALUE
@@ -57,8 +58,8 @@ public class MemberApiController {
 
     /**
      * 수정 API
-     * @param memberId
-     * @param req
+     * @param memberId Member ID
+     * @param req UpdateMemberRequest 타입의 요청
      * @return UpdateMemberResponse
      */
     @PutMapping(value = "/api/v2/members/{memberId}")
@@ -68,6 +69,11 @@ public class MemberApiController {
         memberService.update(memberId, req.getName());
         Member member = memberService.FindById(memberId);
         return new UpdateMemberResponse(memberId, member.getName());
+    }
+
+    @GetMapping("/api/v1/members")
+    public List<Member> listMemberV1() {
+        return memberService.findMembers();
     }
 
 

@@ -18,12 +18,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
+import java.util.stream.IntStream;
+
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static jpabook.jpashop.api.MemberApiController.*;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -125,5 +127,26 @@ class MemberApiControllerTest {
         Member findMember = memberRepository.findById(memberId);
         log.info("findMember: "+findMember);
         assertEquals(CHANGE_NAME, findMember.getName(), "같아야 함");
+    }
+
+    @Test
+    @DisplayName("회원 조회 v1")
+    void listMemberV1Test() throws Exception {
+        //given
+        IntStream.range(0, 10).mapToObj(i -> Member.builder().name("member_" + i).city("Seoul_" + i).street("테헤란로_" + i).zipcode("123123-" + i).build()).forEach(member -> memberRepository.save(member));
+        //when
+        mockMvc.perform(get("/api/v1/members")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding(UTF_8))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0]").exists())
+                .andExpect(jsonPath("$[9]").exists())
+                .andExpect(jsonPath("$[10]").doesNotExist())
+                .andExpect(jsonPath("$.*", hasSize(10))) //배열 크기
+        ;
+
+        //then
     }
 }
