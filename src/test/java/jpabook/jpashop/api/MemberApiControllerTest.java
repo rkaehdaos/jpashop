@@ -1,6 +1,7 @@
 package jpabook.jpashop.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.repository.MemberRepository;
 import jpabook.jpashop.service.MemberService;
@@ -12,9 +13,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static jpabook.jpashop.api.MemberApiController.*;
@@ -39,13 +39,13 @@ class MemberApiControllerTest {
 
     @Test
     @DisplayName("회원 가입 V1")
-    void saveMemberV1Test() throws Exception{
+    void saveMemberV1Test() throws Exception {
 
         //given
         Member member = Member.builder().name("memberA").city("Seoul").street("테헤란로").zipcode("123123").build();
 
         //when
-        mockMvc.perform(post("/api/v1/members")
+        MvcResult mvcResult = mockMvc.perform(post("/api/v1/members")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding(UTF_8)
@@ -53,25 +53,24 @@ class MemberApiControllerTest {
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("id").exists())
-//                .andExpect(status().isCreated())
-                ;
+                .andReturn();
 
         //then
-        List<Member> members = memberRepository.findAll();
-        assertNotNull(members);
-        assertEquals(1, members.size());
-        log.info("***debug member: "+members.get(0));
+        Long id = JsonPath.parse(mvcResult.getResponse().getContentAsString()).read("$.id", Long.class);
+        Member findMember = memberRepository.findById(id);
+        assertNotNull(findMember);
+        log.info(findMember.toString());
     }
 
     @Test
     @DisplayName("회원 가입 V2")
-    void saveMemberV2Test() throws Exception{
+    void saveMemberV2Test() throws Exception {
         //given
         CreateMemberRequest req = new CreateMemberRequest();
         req.setName("Member_A");
 
         //when
-        mockMvc.perform(post("/api/v2/members")
+        MvcResult mvcResult = mockMvc.perform(post("/api/v2/members")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding(UTF_8)
@@ -79,14 +78,12 @@ class MemberApiControllerTest {
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("id").exists())
-//                .andExpect(status().isCreated())
-        ;
-
+                .andReturn();
         //then
-        List<Member> members = memberRepository.findAll();
-        assertNotNull(members);
-        assertEquals(1, members.size());
-        log.info("***debug member: "+members.get(0));
+        Long id = JsonPath.parse(mvcResult.getResponse().getContentAsString()).read("$.id", Long.class);
+        Member findMember = memberRepository.findById(id);
+        assertNotNull(findMember);
+        log.info(findMember.toString());
     }
 
     @Test
@@ -96,13 +93,13 @@ class MemberApiControllerTest {
         final String CHANGE_NAME = "memberB";
 
         Member member = Member.builder().name("memberA").city("Seoul").street("테헤란로").zipcode("123123").build();
-        Long memberId = memberService.join(member);
+        Long memberId = memberRepository.save(member);
 
-        UpdateMemberRequest  req = new UpdateMemberRequest();
+        UpdateMemberRequest req = new UpdateMemberRequest();
         req.setName(CHANGE_NAME);
 
         //when
-        mockMvc.perform(put("/api/v2/members/"+memberId)
+        mockMvc.perform(put("/api/v2/members/" + memberId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding(UTF_8)
@@ -117,6 +114,6 @@ class MemberApiControllerTest {
 
         //then
         Member findMember = memberRepository.findById(memberId);
-        assertEquals(CHANGE_NAME, findMember.getName(),"같아야 함");
+        assertEquals(CHANGE_NAME, findMember.getName(), "같아야 함");
     }
 }
