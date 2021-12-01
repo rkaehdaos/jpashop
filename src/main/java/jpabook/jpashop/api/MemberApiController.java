@@ -2,7 +2,9 @@ package jpabook.jpashop.api;
 
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.service.MemberService;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,19 +50,17 @@ public class MemberApiController {
 
 
 
-    @Data
+
+    //req, res
+
+
+    @Data @AllArgsConstructor @NoArgsConstructor
     static class CreateMemberRequest {
         private String name;
     }
 
-
-    @Data
+    @Data @AllArgsConstructor
     static class CreateMemberResponse {
         private Long id;
-
-        public CreateMemberResponse(Long id) {
-            this.id = id;
-        }
-
     }
 }
