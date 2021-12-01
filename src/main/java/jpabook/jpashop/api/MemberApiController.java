@@ -2,20 +2,20 @@ package jpabook.jpashop.api;
 
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.service.MemberService;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class MemberApiController {
 
+    private final ModelMapper modelMapper;
     private final MemberService memberService;
 
     /**
@@ -71,9 +71,35 @@ public class MemberApiController {
         return new UpdateMemberResponse(memberId, member.getName());
     }
 
+    /**
+     * 조회 v1
+     *
+     * @return Member List 직접 반환
+     *
+     * List 직접 반환 → Array
+     * - 변경이 불가능해짐 : count등의 별도 확장이 아예 불가 ,JSON 스펙이 깨짐
+     *
+     */
     @GetMapping("/api/v1/members")
     public List<Member> listMemberV1() {
         return memberService.findMembers();
+    }
+
+    /**
+     * 조회 V2
+     *
+     * @return RESULT
+     */
+    @GetMapping("/api/v2/members")
+    public Result<List<MemberDto>> listMemberV2() {
+        List<Member> members = memberService.findMembers();
+        List<MemberDto> memberDtos = new ArrayList<>();
+        for (Member member : members) {
+            MemberDto memberDto = modelMapper.map(member, MemberDto.class);
+            memberDtos.add( memberDto);
+        }
+        return new Result<>(memberDtos);
+
     }
 
 
@@ -99,6 +125,19 @@ public class MemberApiController {
     @AllArgsConstructor
     static class UpdateMemberResponse {
         private Long id;
+        private String name;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Result<T> {
+        private T data;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    static class MemberDto {
         private String name;
     }
 }

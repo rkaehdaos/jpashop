@@ -149,4 +149,19 @@ class MemberApiControllerTest {
 
         //then
     }
+    @Test
+    void listMemberV2Test() throws Exception {
+        //given
+        IntStream.range(0, 10).mapToObj(i -> Member.builder().name("member_" + i).city("Seoul_" + i).street("테헤란로_" + i).zipcode("123123-" + i).build()).forEach(member -> memberRepository.save(member));
+        //when
+        mockMvc.perform(get("/api/v2/members")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding(UTF_8))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+        ;
+
+        //then
+    }
 }
