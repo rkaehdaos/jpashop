@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -93,13 +94,12 @@ public class MemberApiController {
     @GetMapping("/api/v2/members")
     public Result<List<MemberDto>> listMemberV2() {
         List<Member> members = memberService.findMembers();
-        List<MemberDto> memberDtos = new ArrayList<>();
-        for (Member member : members) {
-            MemberDto memberDto = modelMapper.map(member, MemberDto.class);
-            memberDtos.add( memberDto);
-        }
-        return new Result<>(memberDtos);
 
+        List<MemberDto> memberDtos = members.stream()
+                .map(member -> modelMapper.map(member, MemberDto.class))
+                .collect(Collectors.toList());
+
+        return new Result<>(memberDtos);
     }
 
 
