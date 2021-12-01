@@ -64,8 +64,8 @@ class MemberApiControllerTest {
     @DisplayName("회원 가입 V2")
     void saveMemberV2Test() throws Exception{
         //given
-        CreateMemberRequest request = new CreateMemberRequest("Member_A");
-//        request.setName("Member_A");
+        CreateMemberRequest request = new CreateMemberRequest();
+        request.setName("Member_A");
 
         //when
         mockMvc.perform(post("/api/v2/members")

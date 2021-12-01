@@ -49,17 +49,15 @@ public class MemberApiController {
     }
 
 
-
-
     //req, res
 
-
-    @Data @AllArgsConstructor @NoArgsConstructor
+    @Data
     static class CreateMemberRequest {
         private String name;
     }
 
-    @Data @AllArgsConstructor
+    @Data
+    @AllArgsConstructor
     static class CreateMemberResponse {
         private Long id;
     }
