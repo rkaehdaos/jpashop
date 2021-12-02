@@ -5,7 +5,6 @@ import com.jayway.jsonpath.JsonPath;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.repository.MemberRepository;
 import jpabook.jpashop.service.MemberService;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("Member API")
 @AutoConfigureMockMvc
 @Transactional
-@Slf4j
+
 class MemberApiControllerTest {
     @Autowired private EntityManager em;
     @Autowired private MockMvc mockMvc;
@@ -66,7 +65,6 @@ class MemberApiControllerTest {
         Long id = JsonPath.parse(mvcResult.getResponse().getContentAsString()).read("$.id", Long.class);
         Member findMember = memberRepository.findById(id);
         assertNotNull(findMember);
-        log.info(findMember.toString());
     }
 
     @Test
@@ -93,7 +91,6 @@ class MemberApiControllerTest {
         Long id = JsonPath.parse(mvcResult.getResponse().getContentAsString()).read("$.id", Long.class);
         Member findMember = memberRepository.findById(id);
         assertNotNull(findMember);
-        log.info(findMember.toString());
     }
 
     @Test
@@ -125,7 +122,6 @@ class MemberApiControllerTest {
 
         //then
         Member findMember = memberRepository.findById(memberId);
-        log.info("findMember: "+findMember);
         assertEquals(CHANGE_NAME, findMember.getName(), "같아야 함");
     }
 
@@ -135,7 +131,10 @@ class MemberApiControllerTest {
         //given
         final int COUNT = 10;
         IntStream.range(0, COUNT).mapToObj(i -> Member.builder().name("member_" + i).city("Seoul_" + i).street("테헤란로_" + i).zipcode("123123-" + i).build()).forEach(member -> memberRepository.save(member));
-        //when
+        em.flush();
+        em.clear();
+
+        //then
         mockMvc.perform(get("/api/v1/members")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -148,15 +147,18 @@ class MemberApiControllerTest {
                 .andExpect(jsonPath("$.*", hasSize(COUNT))) // 개체 수
         ;
 
-        //then
     }
+
     @Test
     @DisplayName("회원 조회 v2")
     void listMemberV2Test() throws Exception {
         //given
         final int COUNT = 10;
         IntStream.range(0, COUNT).mapToObj(i -> Member.builder().name("member_" + i).city("Seoul_" + i).street("테헤란로_" + i).zipcode("123123-" + i).build()).forEach(member -> memberRepository.save(member));
-        //when
+        em.flush();
+        em.clear();
+
+        //then
         mockMvc.perform(get("/api/v2/members")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
@@ -167,6 +169,5 @@ class MemberApiControllerTest {
                 .andExpect(jsonPath("$.data.*", hasSize(10))) // 개체 수
         ;
 
-        //then
     }
 }
