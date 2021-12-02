@@ -92,14 +92,14 @@ public class MemberApiController {
      * @return RESULT
      */
     @GetMapping("/api/v2/members")
-    public Result<List<MemberDto>> listMemberV2() {
+    public Result listMemberV2() {
         List<Member> members = memberService.findMembers();
 
         List<MemberDto> memberDtos = members.stream()
                 .map(member -> modelMapper.map(member, MemberDto.class))
                 .collect(Collectors.toList());
 
-        return new Result<>(memberDtos);
+        return new Result(memberDtos.size(), memberDtos);
     }
 
 
@@ -129,8 +129,10 @@ public class MemberApiController {
     }
 
     @Data
+    @Builder
     @AllArgsConstructor
     static class Result<T> {
+        private int count;
         private T data;
     }
 

@@ -133,7 +133,8 @@ class MemberApiControllerTest {
     @DisplayName("회원 조회 v1")
     void listMemberV1Test() throws Exception {
         //given
-        IntStream.range(0, 10).mapToObj(i -> Member.builder().name("member_" + i).city("Seoul_" + i).street("테헤란로_" + i).zipcode("123123-" + i).build()).forEach(member -> memberRepository.save(member));
+        final int COUNT = 10;
+        IntStream.range(0, COUNT).mapToObj(i -> Member.builder().name("member_" + i).city("Seoul_" + i).street("테헤란로_" + i).zipcode("123123-" + i).build()).forEach(member -> memberRepository.save(member));
         //when
         mockMvc.perform(get("/api/v1/members")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -144,15 +145,17 @@ class MemberApiControllerTest {
                 .andExpect(jsonPath("$[0]").exists())
                 .andExpect(jsonPath("$[9]").exists())
                 .andExpect(jsonPath("$[10]").doesNotExist())
-                .andExpect(jsonPath("$.*", hasSize(10))) //배열 크기
+                .andExpect(jsonPath("$.*", hasSize(COUNT))) // 개체 수
         ;
 
         //then
     }
     @Test
+    @DisplayName("회원 조회 v2")
     void listMemberV2Test() throws Exception {
         //given
-        IntStream.range(0, 10).mapToObj(i -> Member.builder().name("member_" + i).city("Seoul_" + i).street("테헤란로_" + i).zipcode("123123-" + i).build()).forEach(member -> memberRepository.save(member));
+        final int COUNT = 10;
+        IntStream.range(0, COUNT).mapToObj(i -> Member.builder().name("member_" + i).city("Seoul_" + i).street("테헤란로_" + i).zipcode("123123-" + i).build()).forEach(member -> memberRepository.save(member));
         //when
         mockMvc.perform(get("/api/v2/members")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -160,6 +163,8 @@ class MemberApiControllerTest {
                         .characterEncoding(UTF_8))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("count").value(COUNT))
+                .andExpect(jsonPath("$.data.*", hasSize(10))) // 개체 수
         ;
 
         //then
