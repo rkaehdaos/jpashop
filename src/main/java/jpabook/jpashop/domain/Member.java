@@ -24,6 +24,10 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Order> orders;
 
+    public void updateName(String name) {
+        this.name = name;
+    }
+
     @Builder
     public Member(String name, String city, String street, String zipcode, List<Order> orders) {
         this.name = name;
