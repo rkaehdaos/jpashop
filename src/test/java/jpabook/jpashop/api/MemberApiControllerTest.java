@@ -187,7 +187,9 @@ class MemberApiControllerTest {
 //                .andExpect(jsonPath("$[0]").exists())
 //                .andExpect(jsonPath("$[9]").exists())
 //                .andExpect(jsonPath("$[10]").doesNotExist())
-                .andExpect(jsonPath("$.*", hasSize(COUNT))) // 개체 수
+                .andExpect(jsonPath("$.*", hasSize(COUNT))) // 개체 수 판단 : hamcrest Matcher 사용
+                .andExpect(jsonPath("$.length()").value(COUNT)) // 길이 판단
+                .andExpect(jsonPath("$.size()").value(COUNT)) // 길이 판단
         ;
 
     }
