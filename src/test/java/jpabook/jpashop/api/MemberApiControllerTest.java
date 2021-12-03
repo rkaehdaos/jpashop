@@ -48,7 +48,7 @@ class MemberApiControllerTest {
 
 
 //    @BeforeEach
-    private void setTestData() {
+    void setTestData() {
         //1
         Member userA = Member.builder().name("userA").city("Seoul").street("테헤란로").zipcode("1-A").build();
         Book jpabook1 = Book.builder().name("JPA1").price(10000).stockQuantity(100).build();
@@ -75,6 +75,7 @@ class MemberApiControllerTest {
         em.persist(order2);
 
     }
+
 
 
 
