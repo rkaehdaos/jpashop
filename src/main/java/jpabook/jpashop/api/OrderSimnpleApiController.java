@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
+
+
+import static java.util.stream.Collectors.*;
 
 /**
  * xToOne(ManyToOne, OneToOne) 연관 관계 최적화
@@ -38,16 +40,12 @@ public class OrderSimnpleApiController {
     /**
      * v2 : DTO로 조회함(fetch join X)
      * - 단점 : 지연로딩으로 쿼리 N번 호출
-     *
-     * @return
      */
     @GetMapping("/api/v2/simple-orders")
     public List<SimpleOrderDto> ordersV2() {
-        List<Order> all = orderRepository.findAll();
-        List<SimpleOrderDto> result = all.stream()
-                .map(order -> new SimpleOrderDto(order))
-                .collect(Collectors.toList());
-        return result;
+        return orderRepository.findAll().stream()
+                .map(SimpleOrderDto::new)
+                .collect(toList());
     }
 
     @Data
@@ -66,6 +64,5 @@ public class OrderSimnpleApiController {
             address = order.getDelivery().getAddress();
         }
     }
-
 
 }
