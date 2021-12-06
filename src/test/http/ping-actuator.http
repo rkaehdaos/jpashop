@@ -1,0 +1,3 @@
+### actuator
+GET localhost:8080/actuator
+GET {{host}}:{{port}}/actuator
