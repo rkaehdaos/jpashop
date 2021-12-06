@@ -12,7 +12,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.FlashMap;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -59,7 +61,7 @@ class MemberControllerTest {
         testData.setStreet("테헤란로");
         testData.setZipcode("12345");
 
-        mockMvc.perform(post("/members/new")
+        MvcResult mvcResult = mockMvc.perform(post("/members/new")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("name", testData.getName())
                         .param("city", testData.getCity())
@@ -68,11 +70,9 @@ class MemberControllerTest {
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(flash().attributeExists("savedMemberId"))
-        ;
-        List<Member> members = memberRepository.findAll();
-        assertNotNull(members);
-        assertEquals(1, members.size(), "1개만 저장 되어있어야 함");
-        Member findMember = members.get(0);
+                .andReturn();
+        Long savedMemberId = Long.valueOf(mvcResult.getFlashMap().get("savedMemberId").toString());
+        Member findMember = memberRepository.findById(savedMemberId);
         assertEquals(testData.getName(), findMember.getName());
         assertEquals(testData.getCity(), findMember.getAddress().getCity());
         assertEquals(testData.getStreet(), findMember.getAddress().getStreet());
