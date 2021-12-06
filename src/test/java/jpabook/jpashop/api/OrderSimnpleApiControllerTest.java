@@ -42,8 +42,7 @@ class OrderSimnpleApiControllerTest {
                         .characterEncoding(UTF_8))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-//                .andExpect(jsonPath("count").value(COUNT))
-//                .andExpect(jsonPath("$.data.*", hasSize(COUNT))) // 개체 수
+                .andExpect(jsonPath("$.*", hasSize(2))) // 주문 수
         ;
 
         //then
