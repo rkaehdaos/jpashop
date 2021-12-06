@@ -48,7 +48,7 @@ class MemberApiControllerTest {
     @Autowired private ObjectMapper objectMapper;
 
 
-    @BeforeEach
+//    @BeforeEach
     void setTestData() {
         //1
         Member userA = Member.builder().name("userA").city("Seoul").street("테헤란로").zipcode("1-A").build();
@@ -170,7 +170,7 @@ class MemberApiControllerTest {
 
     @Test
     @DisplayName("회원 조회 v1")
-    @Disabled("테스트 데이터 양방향 Tostring 무한. 엔티티가 들어나는 안좋은 API 예시라 어노테이션 처리하면 지정하면 엔티티 지저분해짐")
+//    @Disabled("테스트 데이터 양방향 Tostring 무한. 엔티티가 들어나는 안좋은 API 예시라 어노테이션 처리하면 지정하면 엔티티 지저분해짐")
     void listMemberV1Test() throws Exception {
         //given
         final int COUNT = 10;
@@ -218,8 +218,8 @@ class MemberApiControllerTest {
                         .characterEncoding(UTF_8))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("count").value(COUNT+2))
-                .andExpect(jsonPath("$.data.*", hasSize(COUNT+2))) // 개체 수
+                .andExpect(jsonPath("count").value(COUNT))
+                .andExpect(jsonPath("$.data.*", hasSize(COUNT))) // 개체 수
         ;
 
     }
