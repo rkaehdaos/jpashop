@@ -1,5 +1,6 @@
 package jpabook.jpashop;
 
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import jpabook.jpashop.controller.BookForm;
 import jpabook.jpashop.controller.MemberForm;
 import jpabook.jpashop.domain.Address;
@@ -18,6 +19,11 @@ public class JpashopAdvanceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(JpashopAdvanceApplication.class, args);
+    }
+
+    @Bean
+    Hibernate5Module hibernate5Module() {
+        return new Hibernate5Module();
     }
 
     @Bean
