@@ -1,8 +1,6 @@
 package jpabook.jpashop.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jpabook.jpashop.repository.MemberRepository;
-import jpabook.jpashop.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,5 +46,21 @@ class OrderSimnpleApiControllerTest {
         //then
     }
 
+    @Test
+    void ordersV2Test() throws Exception {
+        //given
+
+        //when
+        mockMvc.perform(get("/api/v2/simple-orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding(UTF_8))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.*", hasSize(2))) // 주문 수
+        ;
+
+        //then
+    }
 
 }
