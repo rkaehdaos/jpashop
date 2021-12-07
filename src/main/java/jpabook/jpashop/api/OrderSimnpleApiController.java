@@ -4,7 +4,9 @@ import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.domain.OrderSearch;
 import jpabook.jpashop.domain.OrderStatus;
+import jpabook.jpashop.repository.OrderQueryRepository;
 import jpabook.jpashop.repository.OrderRepository;
+import jpabook.jpashop.repository.order.query.OrderQueryDto;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +28,7 @@ import static java.util.stream.Collectors.*;
 @RequiredArgsConstructor
 public class OrderSimnpleApiController {
     private final OrderRepository orderRepository;
+    private final OrderQueryRepository orderQueryRepository;
 
     @GetMapping("/api/v1/simple-orders")
     public List<Order> ordersV1() {
@@ -66,8 +69,8 @@ public class OrderSimnpleApiController {
     }
 
     /**
-     * V3 : DTO로 조회함(fetch join O)
-     * - 단점 : 지연로딩으로 쿼리 N번 호출
+     * V3 : fetch join
+
      */
     @GetMapping("/api/v3/simple-orders")
     public List<OrderDto> ordersV3() {
@@ -92,6 +95,14 @@ public class OrderSimnpleApiController {
             orderStatus = order.getOrderStatus();
             address = order.getDelivery().getAddress();
         }
+    }
+
+    /**
+     * V4 : DTO로 조회함(fetch join O)
+     */
+    @GetMapping("/api/v4/simple-orders")
+    public List<OrderQueryDto> ordersV4() {
+        return orderQueryRepository.findOrderQueryDtos();
     }
 
 }
