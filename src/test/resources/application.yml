@@ -29,6 +29,9 @@ spring:
 #         system out 출력
         show_sql: false
         format_sql: true
+  jackson:
+    serialization:
+      indent_output: true
 # 로거로 찍기
 logging.level:
   org.hibernate.SQL: debug
