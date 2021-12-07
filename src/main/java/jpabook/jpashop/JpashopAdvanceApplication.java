@@ -1,5 +1,6 @@
 package jpabook.jpashop;
 
+import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import jpabook.jpashop.controller.BookForm;
 import jpabook.jpashop.controller.MemberForm;
 import jpabook.jpashop.domain.Address;
@@ -18,6 +19,13 @@ public class JpashopAdvanceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(JpashopAdvanceApplication.class, args);
+    }
+
+    @Bean
+    Hibernate5Module hibernate5Module() {
+        Hibernate5Module hibernate5Module = new Hibernate5Module();
+//        hibernate5Module.configure(Hibernate5Module.Feature.FORCE_LAZY_LOADING, true);
+        return hibernate5Module;
     }
 
     @Bean
@@ -66,7 +74,6 @@ public class JpashopAdvanceApplication {
                     .author(form.getAuthor())
                     .isbn(form.getIsbn()).build();
         });
-
 
         return modelMapper;
     }
