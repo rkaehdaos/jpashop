@@ -63,4 +63,21 @@ class OrderSimnpleApiControllerTest {
         //then
     }
 
+    @Test
+    void ordersV3Test() throws Exception {
+        //given
+
+        //when
+        mockMvc.perform(get("/api/v3/simple-orders")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding(UTF_8))
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.*", hasSize(2))) // 주문 수
+        ;
+
+        //then
+    }
+
 }

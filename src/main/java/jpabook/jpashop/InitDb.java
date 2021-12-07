@@ -6,6 +6,7 @@ import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.domain.OrderItem;
 import jpabook.jpashop.domain.item.Book;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import javax.persistence.EntityManager;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class InitDb {
     private final InitService initService;
 
@@ -21,6 +23,7 @@ public class InitDb {
     public void init(){
         initService.dbInit1();
         initService.dbInit2();
+        log.info("******************************Test Data*********");
     }
 
     @Component

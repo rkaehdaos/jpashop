@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -18,8 +19,14 @@ import java.util.List;
 public class OrderRepository {
 
     private final EntityManager em;
-    public void save(Order order) { em.persist(order);}
-    public Order findOne(Long id) { return em.find(Order.class, id);}
+
+    public void save(Order order) {
+        em.persist(order);
+    }
+
+    public Order findOne(Long id) {
+        return em.find(Order.class, id);
+    }
 
     //동적 쿼리
     // 1. 스트링 처리 : 개노가다
@@ -59,7 +66,6 @@ public class OrderRepository {
     }
 
 
-
     // 2. JPA Criteria : 실무에서 쓸 수 없음. 보고나서도 어떤 쿼리가 생겨날지 유추가 안됨
     public List<Order> findAllByCriteria(OrderSearch orderSearch) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -85,18 +91,20 @@ public class OrderRepository {
         return query.getResultList();
     }
 
-    // 3. Query DSL - 생략
 
-
-    /**
-     * 전체 찾기
-     *
-     * @return 주문 전체 리스트
-     */
     public List<Order> findAll() {
-        return em.createQuery("select o from Order o", Order.class).getResultList();
+        return em.createQuery(
+                        "select o from Order o", Order.class)
+                .getResultList();
     }
 
-
-
+    public List<Order> findAllWithMemberDelivery() {
+        return em.createQuery(
+                        "select distinct o from Order o" +
+                                " join fetch o.member m" +
+                                " join fetch o.delivery d" +
+                                " join fetch o.orderItems oi" +
+                                " join fetch oi.item i", Order.class)
+                .getResultList();
+    }
 }

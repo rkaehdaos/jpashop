@@ -65,4 +65,33 @@ public class OrderSimnpleApiController {
         }
     }
 
+    /**
+     * V3 : DTO로 조회함(fetch join O)
+     * - 단점 : 지연로딩으로 쿼리 N번 호출
+     */
+    @GetMapping("/api/v3/simple-orders")
+    public List<OrderDto> ordersV3() {
+
+        return orderRepository.findAllWithMemberDelivery().stream()
+                .map(OrderDto::new)
+                .collect(toList());
+    }
+
+    @Data
+    static class OrderDto {
+        private Long orderId;
+        private String name;
+        private LocalDateTime orderDate; //주문시간
+        private OrderStatus orderStatus;
+        private Address address;
+
+        public OrderDto(Order order) {
+            orderId = order.getId();
+            name = order.getMember().getName();
+            orderDate = order.getOrderDate();
+            orderStatus = order.getOrderStatus();
+            address = order.getDelivery().getAddress();
+        }
+    }
+
 }

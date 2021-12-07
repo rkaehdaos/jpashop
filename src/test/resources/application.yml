@@ -14,10 +14,11 @@ spring:
 # 클래스 패스의 schema.sql, data.sql
 # 스프링 부트에선 schema-${platform}.sql, data-${platform}.sql도 처리
 # - spring.sql.init.platform 값
-  sql:
-    init:
-      mode: always
-      platform: test
+#
+#  sql:
+#    init:
+#      mode: always
+#      platform: test
 
 # ddl-auto가 create, create-drop인 경우 클래스 루트의 import.sql 실행
   jpa:
