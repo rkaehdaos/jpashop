@@ -1,10 +1,10 @@
 package jpabook.jpashop.repository.order.query;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Data
+@Getter
 @RequiredArgsConstructor
 public class OrderItemQueryDto {
 

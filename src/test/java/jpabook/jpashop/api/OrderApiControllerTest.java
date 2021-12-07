@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-@DisplayName("Order Test")
+@DisplayName("Order API Test")
 @AutoConfigureMockMvc
 @Transactional
 class OrderApiControllerTest {

@@ -4,10 +4,10 @@ import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.domain.OrderSearch;
 import jpabook.jpashop.domain.OrderStatus;
-import jpabook.jpashop.repository.OrderSimpleQueryRepository;
 import jpabook.jpashop.repository.OrderRepository;
+import jpabook.jpashop.repository.OrderSimpleQueryRepository;
 import jpabook.jpashop.repository.order.query.OrderQueryDto;
-import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 
 /**
  * xToOne(ManyToOne, OneToOne) 연관 관계 최적화
@@ -51,7 +50,7 @@ public class OrderSimnpleApiController {
                 .collect(toList());
     }
 
-    @Data
+    @Getter
     static class SimpleOrderDto {
         private Long orderId;
         private String name;
@@ -80,7 +79,7 @@ public class OrderSimnpleApiController {
                 .collect(toList());
     }
 
-    @Data
+    @Getter
     static class OrderDto {
         private Long orderId;
         private String name;
