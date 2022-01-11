@@ -195,9 +195,9 @@ class MemberApiControllerTest {
 //                .andExpect(jsonPath("$[0]").exists())
 //                .andExpect(jsonPath("$[9]").exists())
 //                .andExpect(jsonPath("$[10]").doesNotExist())
-                .andExpect(jsonPath("$.*", hasSize(COUNT))) // 개체 수 판단 : hamcrest Matcher 사용
-                .andExpect(jsonPath("$.length()").value(COUNT)) // 길이 판단
-                .andExpect(jsonPath("$.size()").value(COUNT)) // 길이 판단
+                .andExpect(jsonPath("$.*", hasSize(COUNT+2))) // 개체 수 판단 : hamcrest Matcher 사용
+                .andExpect(jsonPath("$.length()").value(COUNT + 2)) // 길이 판단
+                .andExpect(jsonPath("$.size()").value(COUNT + 2)) // 길이 판단
         ;
 
     }
@@ -218,8 +218,8 @@ class MemberApiControllerTest {
                         .characterEncoding(UTF_8))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("count").value(COUNT))
-                .andExpect(jsonPath("$.data.*", hasSize(COUNT))) // 개체 수
+                .andExpect(jsonPath("count").value(COUNT + 2))
+                .andExpect(jsonPath("$.data.*", hasSize(COUNT + 2))) // 개체 수
         ;
 
     }
