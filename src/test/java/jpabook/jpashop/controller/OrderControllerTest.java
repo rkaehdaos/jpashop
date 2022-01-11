@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -71,7 +72,7 @@ class OrderControllerTest {
         Long bookId = itemService.save(book);
 
         //when
-        mockMvc.perform(post("/order")
+        MvcResult mvcResult = mockMvc.perform(post("/order")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("memberId", String.valueOf(memberId))
                         .param("itemId", String.valueOf(bookId))
@@ -80,12 +81,12 @@ class OrderControllerTest {
                 .andDo(print())
                 .andExpect(status().isFound()) //redirect
                 .andExpect(flash().attributeExists("orderId"))
-        ;
+                .andReturn();
+        Long returnedOrderId = Long.valueOf(String.valueOf(mvcResult.getFlashMap().get("orderId")));
 
         //then
-        List<Order> orderList = orderRepository.findAll();
-        assertNotNull(orderList,"비어있지 않아야 하고");
-        assertEquals(1, orderList.size(),"1개만 들어있는데");
+        Order order = orderRepository.findOne(returnedOrderId);
+        assertNotNull(order);
         assertEquals(STOCK-ORDER_COUNT, book.getStockQuantity(), "남은 재고 확인");
 
 
