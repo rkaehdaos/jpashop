@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -61,7 +62,7 @@ class ItemControllerTest {
         bookForm.setIsbn("123123");
 
         //when
-        mockMvc.perform(post("/items/new")
+        MvcResult mvcResult = mockMvc.perform(post("/items/new")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("name", bookForm.getName())
                         .param("price", String.valueOf(bookForm.getPrice()))
@@ -70,15 +71,12 @@ class ItemControllerTest {
                 .andDo(print())
                 .andExpect(status().isFound())
                 .andExpect(flash().attributeExists("savedBookId"))
-        ;
+                .andReturn();
+        Long returnedBookId = Long.valueOf(String.valueOf(mvcResult.getFlashMap().get("savedBookId")));
 
         //then
-        List<Item> items = itemRepository.findAll();
-        assertNotNull(items);
-        assertEquals(1, items.size(), "1개만 저장");
-        Item item = items.get(0);
+        Item item = itemRepository.findById(returnedBookId);
         assertEquals(bookForm.getName(), item.getName());
-
     }
 
     @Test
