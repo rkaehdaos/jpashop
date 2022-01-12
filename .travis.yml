@@ -1,0 +1,19 @@
+language: java
+
+jdk:
+  - openjdk11
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.gradle'
+
+before_install:
+  - chmod +x gradlew
+
+script: "./gradlew clean build"
+
+after_success:
+  - "./gradlew jacocoTestReport coveralls"
+
+notifications:
+  slack: rkaehdaos:__SLACK_TOKEN__
