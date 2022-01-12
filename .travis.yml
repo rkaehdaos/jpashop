@@ -16,4 +16,4 @@ after_success:
   - "./gradlew jacocoTestReport coveralls"
 
 notifications:
-  slack: rkaehdaos:wPhSVIqM14VNeq09LFsuSJcA
+  slack: rkaehdaos:__SLACK_TOKEN__
