@@ -1,6 +1,6 @@
 package jpabook.jpashop.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jpabook.jpashop.repository.OrderRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -25,13 +22,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 class OrderSimnpleApiControllerTest {
-    @Autowired private EntityManager em;
     @Autowired private MockMvc mockMvc;
-    @Autowired private ObjectMapper objectMapper;
+    @Autowired private OrderRepository orderRepository;
 
     @Test
     void ordersV1Test() throws Exception {
         //given
+        final int orderCount = orderRepository.findAll().size();
 
         //when
         mockMvc.perform(get("/api/v1/simple-orders")
@@ -40,15 +37,14 @@ class OrderSimnpleApiControllerTest {
                         .characterEncoding(UTF_8))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.*", hasSize(2))) // 주문 수
+                .andExpect(jsonPath("$.*", hasSize(orderCount))) // 주문 수
         ;
-
-        //then
     }
 
     @Test
     void ordersV2Test() throws Exception {
         //given
+        final int orderCount = orderRepository.findAll().size();
 
         //when
         mockMvc.perform(get("/api/v2/simple-orders")
@@ -57,15 +53,14 @@ class OrderSimnpleApiControllerTest {
                         .characterEncoding(UTF_8))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.*", hasSize(2))) // 주문 수
+                .andExpect(jsonPath("$.*", hasSize(orderCount))) // 주문 수
         ;
-
-        //then
     }
 
     @Test
     void ordersV3Test() throws Exception {
         //given
+        final int orderCount = orderRepository.findAll().size();
 
         //when
         mockMvc.perform(get("/api/v3/simple-orders")
@@ -74,15 +69,14 @@ class OrderSimnpleApiControllerTest {
                         .characterEncoding(UTF_8))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.*", hasSize(2))) // 주문 수
+                .andExpect(jsonPath("$.*", hasSize(orderCount))) // 주문 수
         ;
-
-        //then
     }
 
     @Test
     void ordersV4Test() throws Exception {
         //given
+        final int orderCount = orderRepository.findAll().size();
 
         //when
         mockMvc.perform(get("/api/v4/simple-orders")
@@ -91,9 +85,7 @@ class OrderSimnpleApiControllerTest {
                         .characterEncoding(UTF_8))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.*", hasSize(2))) // 주문 수
+                .andExpect(jsonPath("$.*", hasSize(orderCount))) // 주문 수
         ;
-        //then
     }
-
 }

@@ -12,7 +12,7 @@ cache:
     - '$HOME/.gradle'
 
 before_install:
-  - chmod +x gradlew
+  - "chmod +x gradlew"
 
 before_script:
   - "git config --global user.name 'GeunChang Ahn <rkaehdaos>'"

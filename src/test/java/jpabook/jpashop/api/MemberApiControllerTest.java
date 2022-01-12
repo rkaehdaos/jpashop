@@ -8,7 +8,6 @@ import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.domain.OrderItem;
 import jpabook.jpashop.domain.item.Book;
 import jpabook.jpashop.repository.MemberRepository;
-import jpabook.jpashop.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -43,7 +42,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class MemberApiControllerTest {
     @Autowired private EntityManager em;
     @Autowired private MockMvc mockMvc;
-    @Autowired private MemberService memberService;
     @Autowired private MemberRepository memberRepository;
     @Autowired private ObjectMapper objectMapper;
 
@@ -51,6 +49,8 @@ class MemberApiControllerTest {
 //    @BeforeEach
     void setTestData() {
         //1
+/*
+
         Member userA = Member.builder().name("userA").city("Seoul").street("테헤란로").zipcode("1-A").build();
         Book jpabook1 = Book.builder().name("JPA1").price(10000).stockQuantity(100).build();
         Book jpabook2 = Book.builder().name("JPA2").price(20000).stockQuantity(100).build();
@@ -62,8 +62,11 @@ class MemberApiControllerTest {
         OrderItem order1Item2 =OrderItem.createOrderItem(jpabook2,20000,2);
         Order order1 = Order.createOrder(userA, createDelivery(userA), order1Item1, order1Item2);
         em.persist(order1);
+*/
 
         //2
+/*
+
         Member userB = Member.builder().name("userB").city("Asan").street("용연로").zipcode("1-B").build();
         Book springBook1 = Book.builder().name("SPRING1").price(20000).stockQuantity(200).build();
         Book springBook2 = Book.builder().name("SPRING2").price(40000).stockQuantity(300).build();
@@ -74,15 +77,17 @@ class MemberApiControllerTest {
         OrderItem order2Item2 =OrderItem.createOrderItem(springBook2,40000,4);
         Order order2 = Order.createOrder(userB, createDelivery(userB), order2Item1, order2Item2);
         em.persist(order2);
+*/
 
     }
-
+/*
 
     private Delivery createDelivery(Member member) {
         Delivery delivery = new Delivery();
         delivery.setAddress(member.getAddress());
         return delivery;
     }
+*/
 
     @Test
     @DisplayName("회원 가입 V1")
@@ -173,6 +178,7 @@ class MemberApiControllerTest {
 //    @Disabled("테스트 데이터 양방향 Tostring 무한. 엔티티가 들어나는 안좋은 API 예시라 어노테이션 처리하면 지정하면 엔티티 지저분해짐")
     void listMemberV1Test() throws Exception {
         //given
+        final int init_count = memberRepository.findAll().size();
         final int COUNT = 10;
         IntStream.range(0, COUNT).mapToObj(i ->
                 Member.builder()
@@ -195,9 +201,9 @@ class MemberApiControllerTest {
 //                .andExpect(jsonPath("$[0]").exists())
 //                .andExpect(jsonPath("$[9]").exists())
 //                .andExpect(jsonPath("$[10]").doesNotExist())
-                .andExpect(jsonPath("$.*", hasSize(COUNT+2))) // 개체 수 판단 : hamcrest Matcher 사용
-                .andExpect(jsonPath("$.length()").value(COUNT + 2)) // 길이 판단
-                .andExpect(jsonPath("$.size()").value(COUNT + 2)) // 길이 판단
+                .andExpect(jsonPath("$.*", hasSize(COUNT + init_count))) // 개체 수 판단 : hamcrest Matcher 사용
+                .andExpect(jsonPath("$.length()").value(COUNT + init_count)) // 길이 판단
+                .andExpect(jsonPath("$.size()").value(COUNT + init_count)) // 길이 판단
         ;
 
     }
@@ -206,6 +212,7 @@ class MemberApiControllerTest {
     @DisplayName("회원 조회 v2")
     void listMemberV2Test() throws Exception {
         //given
+        final int init_count = memberRepository.findAll().size();
         final int COUNT = 10;
         IntStream.range(0, COUNT).mapToObj(i -> Member.builder().name("member_" + i).city("Seoul_" + i).street("테헤란로_" + i).zipcode("123123-" + i).build()).forEach(member -> memberRepository.save(member));
         em.flush();
@@ -218,8 +225,8 @@ class MemberApiControllerTest {
                         .characterEncoding(UTF_8))
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("count").value(COUNT + 2))
-                .andExpect(jsonPath("$.data.*", hasSize(COUNT + 2))) // 개체 수
+                .andExpect(jsonPath("count").value(COUNT + init_count))
+                .andExpect(jsonPath("$.data.*", hasSize(COUNT + init_count))) // 개체 수
         ;
 
     }
