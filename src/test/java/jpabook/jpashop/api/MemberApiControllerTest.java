@@ -49,7 +49,6 @@ class MemberApiControllerTest {
 //    @BeforeEach
     void setTestData() {
         //1
-/*
 
         Member userA = Member.builder().name("userA").city("Seoul").street("테헤란로").zipcode("1-A").build();
         Book jpabook1 = Book.builder().name("JPA1").price(10000).stockQuantity(100).build();
@@ -62,11 +61,8 @@ class MemberApiControllerTest {
         OrderItem order1Item2 =OrderItem.createOrderItem(jpabook2,20000,2);
         Order order1 = Order.createOrder(userA, createDelivery(userA), order1Item1, order1Item2);
         em.persist(order1);
-*/
 
         //2
-/*
-
         Member userB = Member.builder().name("userB").city("Asan").street("용연로").zipcode("1-B").build();
         Book springBook1 = Book.builder().name("SPRING1").price(20000).stockQuantity(200).build();
         Book springBook2 = Book.builder().name("SPRING2").price(40000).stockQuantity(300).build();
@@ -77,17 +73,15 @@ class MemberApiControllerTest {
         OrderItem order2Item2 =OrderItem.createOrderItem(springBook2,40000,4);
         Order order2 = Order.createOrder(userB, createDelivery(userB), order2Item1, order2Item2);
         em.persist(order2);
-*/
-
     }
-/*
+
 
     private Delivery createDelivery(Member member) {
         Delivery delivery = new Delivery();
         delivery.setAddress(member.getAddress());
         return delivery;
     }
-*/
+
 
     @Test
     @DisplayName("회원 가입 V1")
@@ -228,6 +222,5 @@ class MemberApiControllerTest {
                 .andExpect(jsonPath("count").value(COUNT + init_count))
                 .andExpect(jsonPath("$.data.*", hasSize(COUNT + init_count))) // 개체 수
         ;
-
     }
 }
