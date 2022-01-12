@@ -7,13 +7,6 @@ plugins {
 }
 apply plugin: 'io.spring.dependency-management'
 
-jacocoTestReport {
-    reports {
-        xml.enabled = true // coveralls plugin depends on xml format report
-        html.enabled = true
-    }
-}
-
 //빌드시 plain jar 생성 방지
 jar {
     enabled = false
@@ -68,9 +61,15 @@ dependencies {
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-hibernate5
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5'
 
-
 }
 
 test {
     useJUnitPlatform()
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
 }
