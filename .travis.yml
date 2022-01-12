@@ -14,8 +14,8 @@ before_install:
 before_script:
   - "git config --global user.name 'GeunChang Ahn <rkaehdaos>'"
   - "git config --global user.email '13996827+rkaehdaos@users.noreply.github.com'"
-  - "sed -i "s/__SLACK_TOKEN__/${__SLACK_TOKEN__}/" .travis.yml"
-  - "sed -i "s/__COVERALLS_TOKEN__/${__COVERALLS_TOKEN__}/" .coveralls.yml"
+  - "sed -i 's/__SLACK_TOKEN__/${__SLACK_TOKEN__}/' .travis.yml"
+  - "sed -i 's/__COVERALLS_TOKEN__/${__COVERALLS_TOKEN__}/' .coveralls.yml"
 
 script: "./gradlew clean build"
 
